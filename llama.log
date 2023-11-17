@@ -1,0 +1,29 @@
+[1700257522] Multi Modal Mode Enabled[1700257523] warming up the model with an empty run
+[1700257525] Available slots:
+[1700257525]  -> Slot 0 - max context: 2048
+[1700257525] 
+llama server listening at http://127.0.0.1:8080
+
+[1700257525] all slots are idle and system prompt is empty, clear the KV cache
+[1700257525] slot 0 - image loaded [id: 1] resolution (250 x 284)
+[1700257525] slot 0 is processing [task id: 0]
+[1700257525] slot 0 : kv cache rm - [0, end)
+[1700257525] slot 0 - encoding image [id: 1]
+[1700257548] sampled token: 11451: ' py'
+[1700257548] sampled token:  2572: 'ram'
+[1700257548] sampled token:   333: 'id'
+[1700257549] sampled token: 29918: '_'
+[1700257549] sampled token:   262: 'in'
+[1700257550] sampled token: 29918: '_'
+[1700257550] sampled token:  1552: 'the'
+[1700257550] sampled token: 29918: '_'
+[1700257551] sampled token:  2783: 'des'
+[1700257551] sampled token:   814: 'ert'
+[1700257552] sampled token: 29889: '.'
+[1700257552] sampled token:  6173: 'jpg'
+[1700257552] sampled token:     2: ''
+[1700257552] 
+[1700257552] print_timings: prompt eval time =   22865.81 ms /     1 tokens (22865.81 ms per token,     0.04 tokens per second)
+[1700257552] print_timings:        eval time =    4487.75 ms /    12 runs   (  373.98 ms per token,     2.67 tokens per second)
+[1700257552] print_timings:       total time =   27353.56 ms
+[1700257552] slot 0 released (14 tokens in cache)

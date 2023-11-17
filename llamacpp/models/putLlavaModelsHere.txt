@@ -1,0 +1,10 @@
+Download from https://huggingface.co/mys/ggml_llava-v1.5-7b/tree/main
+
+Put both files in this directory.
+
+Either
+ggml-model-q5_k.gguf AND llava-13B-mmproj-model-f16 (preferably)
+
+OR
+
+ggml-model-q4_k.gguf AND llava-7B-mmproj-model-f16 (need to modify the bat file)
