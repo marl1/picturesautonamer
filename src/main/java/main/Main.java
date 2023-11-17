@@ -1,13 +1,25 @@
 package main;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.lang.ProcessBuilder.Redirect;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import model.Body;
@@ -15,6 +27,33 @@ import model.ImageData;
 public class Main {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
+		
+		//Launching the bat
+
+
+	    ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "E:\\crea\\java\\PicturesAutoNamer\\llamacpp\\launchLlavaServer.bat");
+
+        processBuilder.redirectInput();
+        processBuilder.redirectOutput();
+        processBuilder.redirectError();
+        processBuilder.redirectErrorStream(true);
+
+        Process process = processBuilder.start();
+        String line;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        while ((line = reader.readLine()) != null) {
+            System.out.println ("stdout: " + line);
+            if(line.startsWith("llama server listening at ")) {
+            	System.out.println("loool");
+            	launchQuery();
+            }
+        }
+	    
+
+
+	}
+	
+	private static void launchQuery() throws IOException, InterruptedException {
 		String prompt = "A short but descriptive 5-10 words filename in camelCase with no whitespace for this image could be:";
 		System.out.println(prompt);
 		System.out.println("------------");
@@ -27,11 +66,10 @@ public class Main {
 								.id(1)
 								.build();
 		Body body = Body.builder()
-				.prompt(prompt)
-				.temperature(0.1)
-				.imageData(List.of(imageData))
-				.build();
-		//objectMapper.writeValue(new File("target/car.json"), car);
+					.prompt(prompt)
+					.temperature(0.1)
+					.imageData(List.of(imageData))
+					.build();
 
 		//quick test
 	    HttpClient client = HttpClient.newHttpClient();
@@ -52,7 +90,6 @@ public class Main {
 		//open the directory E:\imgtestprjava
 		
 		//
-
 	}
 
 }

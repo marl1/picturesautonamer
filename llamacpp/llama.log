@@ -1,0 +1,11 @@
+[1700251096] Multi Modal Mode Enabled[1700251098] warming up the model with an empty run
+[1700251099] Available slots:
+[1700251099]  -> Slot 0 - max context: 2048
+[1700251099] 
+llama server listening at http://127.0.0.1:8080
+
+[1700251099] all slots are idle and system prompt is empty, clear the KV cache
+[1700252158] slot 0 - image loaded [id: 1] resolution (250 x 284)
+[1700252158] slot 0 is processing [task id: 0]
+[1700252158] slot 0 : kv cache rm - [0, end)
+[1700252158] slot 0 - encoding image [id: 1]
