@@ -1,0 +1,18 @@
+.titled-pane 
+{
+-fx-text-fill: white;
+}
+
+.titled-pane > .title 
+{
+-fx-background-color: grey;
+
+}
+
+
+.titled-pane:hover > .title:hover
+{
+-fx-background-color: grey;
+
+}
+

@@ -1,4 +1,4 @@
-package model;
+package fr.pan.model;
 
 import lombok.Builder;
 

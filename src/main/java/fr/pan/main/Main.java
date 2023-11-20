@@ -1,4 +1,4 @@
-package main;
+package fr.pan.main;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,12 +22,23 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import model.Body;
-import model.ImageData; 
-public class Main {
+import fr.pan.model.Body;
+import fr.pan.model.ImageData;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class Main extends Application {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		
+		launch();
+
+		/*
 		//Launching the bat
 
 
@@ -49,7 +60,7 @@ public class Main {
             }
         }
 	    
-
+*/
 
 	}
 	
@@ -91,5 +102,18 @@ public class Main {
 		
 		//
 	}
+	
+	@Override
+    public void start(Stage stage) throws IOException {
 
+
+	    System.out.println("classpath=" + System.getProperty("java.class.path"));
+	    var url = getClass().getResource("/layouts/main.fxml");
+		VBox root = (VBox)FXMLLoader.load(url);
+		Scene scene = new Scene(root,400,400);
+		scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
+		stage.setScene(scene);
+		stage.show();
+
+    }
 }
