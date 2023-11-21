@@ -34,19 +34,20 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox prefHeight="528.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.pan.controller.MainController">
+<VBox fx:id="root" prefHeight="612.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.pan.controller.MainController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -57,33 +58,47 @@
         </Menu>
       </menus>
     </MenuBar>
-      <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="SOMETIMES">
+      <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
          <VBox.margin>
             <Insets left="20.0" right="20.0" top="20.0" />
          </VBox.margin>
          <children>
-            <Label text="Analyse THIS folder:" />
-            <HBox nodeOrientation="LEFT_TO_RIGHT">
+            <HBox VBox.vgrow="NEVER">
                <children>
-                  <TextField HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" text="Choose..." />
+                  <Label text="Rename the images in THIS folder:" />
                </children>
             </HBox>
+            <HBox nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <TextField fx:id="inputFolder" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="chooseFolder" mnemonicParsing="false" onAction="#chooseFolderClicked" text="Choose..." />
+               </children>
+            </HBox>
+            <HBox nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <CheckBox mnemonicParsing="false" text="Include subdirectories" />
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </HBox>
+            <VBox prefHeight="142.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label text="Prompt :" />
+                  <TextArea prefHeight="328.0" prefWidth="600.0" text="A short but descriptive 5-10 words filename in camelCase with no whitespace for this image could be:" wrapText="true" VBox.vgrow="SOMETIMES" />
+               </children>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </VBox>
             <Separator prefWidth="200.0" visible="false">
                <padding>
                   <Insets bottom="10.0" top="10.0" />
                </padding>
             </Separator>
-            <Label text="Output in THAT folder:" />
-            <HBox nodeOrientation="LEFT_TO_RIGHT">
-               <children>
-                  <TextField HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" text="Choose..." />
-               </children>
-            </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="Analyse and convert">
+                  <Button mnemonicParsing="false" onAction="#startConversionClicked" text="Analyse and convert">
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </padding>
@@ -92,9 +107,9 @@
             </HBox>
          </children>
       </VBox>
-      <VBox alignment="TOP_CENTER" prefHeight="270.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
+      <VBox alignment="TOP_CENTER" prefHeight="289.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
          <children>
-            <TitledPane alignment="TOP_LEFT" animated="false" collapsible="false" contentDisplay="TOP" maxHeight="1.7976931348623157E308" text="OUTPUT" VBox.vgrow="ALWAYS">
+            <TitledPane alignment="TOP_LEFT" animated="false" collapsible="false" contentDisplay="TOP" maxHeight="1.7976931348623157E308" prefHeight="31.0" prefWidth="600.0" text="OUTPUT" VBox.vgrow="ALWAYS">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="437.0" prefWidth="638.0">
                      <opaqueInsets>
