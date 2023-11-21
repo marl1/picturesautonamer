@@ -1,4 +1,4 @@
-module pan {
+open module pan {
 	requires javafx.controls;
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
@@ -6,7 +6,7 @@ module pan {
 	requires java.net.http;
 	requires com.fasterxml.jackson.core;
 	requires com.fasterxml.jackson.databind;
-	requires lombok;
-	opens fr.pan.main;
+	requires static lombok;
 	exports fr.pan.main;
+	exports fr.pan.controller;
 }
