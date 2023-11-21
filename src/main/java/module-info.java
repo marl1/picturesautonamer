@@ -1,4 +1,4 @@
-open module pan {
+open module fr.pan {
 	requires javafx.controls;
 	requires javafx.fxml;
 	requires transitive javafx.graphics;
