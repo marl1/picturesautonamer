@@ -85,7 +85,7 @@
             <VBox prefHeight="142.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
                <children>
                   <Label text="Prompt :" />
-                  <TextArea prefHeight="328.0" prefWidth="600.0" text="A short but descriptive 5-10 words filename in camelCase with no whitespace for this image could be:" wrapText="true" VBox.vgrow="SOMETIMES" />
+                  <TextArea fx:id="prompt" prefHeight="328.0" prefWidth="600.0" text="A short but descriptive 5-10 words filename in camelCase with no whitespace for this image could be:" wrapText="true" VBox.vgrow="SOMETIMES" />
                </children>
                <padding>
                   <Insets top="20.0" />
@@ -115,6 +115,9 @@
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
+                     <children>
+                        <TextArea fx:id="consoleOutput" editable="false" maxWidth="1.7976931348623157E308" prefHeight="280.0" prefWidth="598.0" AnchorPane.bottomAnchor="-10.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="-10.0" AnchorPane.topAnchor="-10.0" />
+                     </children>
                   </AnchorPane>
               </content>
                <padding>

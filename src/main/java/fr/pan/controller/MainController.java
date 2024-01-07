@@ -3,8 +3,10 @@ package fr.pan.controller;
 import java.io.File;
 import java.io.IOException;
 
+import fr.pan.model.ServerLaunchInfos;
 import fr.pan.server.ServerLauncher;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -18,6 +20,12 @@ public class MainController {
 	@FXML
 	private TextField inputFolder;
 	
+	@FXML
+	private TextArea prompt;
+	
+	@FXML
+	private TextArea consoleOutput;
+	
 	
 	@FXML
 	private void chooseFolderClicked() throws IOException {
@@ -30,7 +38,10 @@ public class MainController {
 	
 	@FXML
 	private void startConversionClicked() throws IOException {
-		ServerLauncher.launch();
+		ServerLauncher.launch(new ServerLaunchInfos(
+									inputFolder.getText(),
+									prompt.getText(),
+									consoleOutput.textProperty()));
 	}
 
 	

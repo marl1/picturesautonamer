@@ -80,7 +80,7 @@ public class Main extends Application {
 		scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
 		stage.setScene(scene);
 		stage.show();
-		
+
         try {
             logManager.readConfiguration( getClass().getResource("/layouts/logging.properties").openStream() );
             LOGGER.log(Level.INFO, "PicturesAutoNamer is starting...");

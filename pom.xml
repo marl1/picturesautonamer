@@ -7,6 +7,7 @@
 	<properties>
 		<maven.compiler.target>17</maven.compiler.target>
 		<maven.compiler.source>17</maven.compiler.source>
+		<lombok.version>1.18.30</lombok.version>
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
@@ -24,7 +25,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.30</version>
+			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
@@ -77,16 +78,16 @@
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-maven-plugin</artifactId>
 				<version>0.0.8</version>
-				    <configuration>
-        <stripDebug>true</stripDebug>
-        <compress>2</compress>
-        <noHeaderFiles>true</noHeaderFiles>
-        <noManPages>true</noManPages>
-        <launcher>PicturesAutoNamer</launcher>
-        <jlinkImageName>PicturesAutoNamer</jlinkImageName>
-        <jlinkZipName>PicturesAutoNamer</jlinkZipName>
+				<configuration>
+					<stripDebug>true</stripDebug>
+
+					<noHeaderFiles>true</noHeaderFiles>
+					<noManPages>true</noManPages>
+					<launcher>PicturesAutoNamer</launcher>
+					<jlinkImageName>PicturesAutoNamer</jlinkImageName>
+
 					<mainClass>fr.pan.main.Main</mainClass>
-    </configuration>
+				</configuration>
 
 			</plugin>
 			<plugin>
@@ -112,6 +113,13 @@
 				<configuration>
 					<source>17</source>
 					<target>17</target>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 
