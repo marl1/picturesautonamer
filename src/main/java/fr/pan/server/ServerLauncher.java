@@ -1,16 +1,26 @@
 package fr.pan.server;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+import javax.imageio.ImageIO;
+
 import fr.pan.model.ServerLaunchInfos;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.name.Rename;
+import net.coobird.thumbnailator.resizers.configurations.Antialiasing;
 
 public class ServerLauncher {
 	
@@ -51,12 +61,28 @@ public class ServerLauncher {
 	
 	private static void listFiles(String folder) {
 	    try (Stream<Path> stream = Files.list(Paths.get(folder))) {
-	         stream
+	         List<Path> fileList = stream
 	          .filter(file -> !Files.isDirectory(file))
-	          .forEach(f -> System.out.println(f) );
+	          .toList();
+	         for(Path p: fileList) {
+	        	 System.out.println(getBase64(p));
+	         }
 	    } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE, e.getLocalizedMessage());
 		}
+	}
+	
+	private static String getBase64(Path path) throws IOException {
+		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
+			Thumbnails.of(path.toFile())
+									.size(300, 300)
+									.antialiasing(Antialiasing.ON)
+									.toOutputStream(os);
+			return Base64.getEncoder().encodeToString(os.toByteArray());
+		} catch (IOException e) {
+			throw e;
+		}
+
+
 	}
 }
