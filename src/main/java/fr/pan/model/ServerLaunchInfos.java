@@ -1,6 +1,7 @@
 package fr.pan.model;
 
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.TextArea;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,6 +12,6 @@ public class ServerLaunchInfos {
 
 	private final String prompt;
 
-	private final StringProperty guiConsoleOutput;
+	private final TextArea guiConsoleOutput;
 
 }

@@ -1,2 +1,1 @@
-echo launching fake bat
-echo llama server listening at blah
+%~dp0server.exe -m E:\crea\txt\gguf\ggml-model-q5_k.gguf --mmproj E:\crea\txt\gguf\llava-13B-mmproj-model-f16.gguf -c 2048 --port 8080

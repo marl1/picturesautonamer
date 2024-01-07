@@ -5,12 +5,15 @@ import java.io.IOException;
 
 import fr.pan.model.ServerLaunchInfos;
 import fr.pan.server.ServerLauncher;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class MainController {
 	
@@ -38,12 +41,22 @@ public class MainController {
 	
 	@FXML
 	private void startConversionClicked() throws IOException {
-		ServerLauncher.launch(new ServerLaunchInfos(
-									inputFolder.getText(),
-									prompt.getText(),
-									consoleOutput.textProperty()));
-	}
+		
+		Task<Boolean> task = new Task<Boolean>() {
 
+		    @Override
+		    protected Boolean call() throws Exception {
+				ServerLauncher.launch(new ServerLaunchInfos(
+						inputFolder.getText(),
+						prompt.getText(),
+						consoleOutput)
+				);
+				return true;
+		    }
+
+		};
+		new Thread(task).start();
+	}
 	
 }
 
