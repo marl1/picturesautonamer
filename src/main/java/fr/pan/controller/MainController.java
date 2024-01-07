@@ -1,21 +1,16 @@
 package fr.pan.controller;
 
-import java.awt.MenuBar;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
+import fr.pan.model.ServerLaunchInfos;
 import fr.pan.server.ServerLauncher;
-import javafx.application.Application;
-import javafx.scene.Scene;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 
 public class MainController {
 	
@@ -24,6 +19,12 @@ public class MainController {
 
 	@FXML
 	private TextField inputFolder;
+	
+	@FXML
+	private TextArea prompt;
+	
+	@FXML
+	private TextArea consoleOutput;
 	
 	
 	@FXML
@@ -37,7 +38,10 @@ public class MainController {
 	
 	@FXML
 	private void startConversionClicked() throws IOException {
-		ServerLauncher.launch();
+		ServerLauncher.launch(new ServerLaunchInfos(
+									inputFolder.getText(),
+									prompt.getText(),
+									consoleOutput.textProperty()));
 	}
 
 	

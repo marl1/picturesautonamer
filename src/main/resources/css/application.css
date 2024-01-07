@@ -16,3 +16,10 @@
 
 }
 
+#consoleOutput .content {
+    -fx-background-color: black ;
+}
+
+#consoleOutput {
+    -fx-text-fill: lime;
+}
