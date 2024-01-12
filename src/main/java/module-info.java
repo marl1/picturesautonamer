@@ -10,6 +10,8 @@ open module fr.pan {
 	requires javafx.base;
 	requires net.coobird.thumbnailator;
 	requires java.desktop;
+	requires org.slf4j;
+	requires ch.qos.logback.core;
 	exports fr.pan.main;
 	exports fr.pan.controller;
 }

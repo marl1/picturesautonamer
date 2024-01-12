@@ -7,21 +7,23 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.pan.model.Body;
 import fr.pan.model.ImageData;
+import fr.pan.model.query.Body;
 
 public class ServerQuerier {
-	private static final Logger LOGGER = Logger.getLogger(ServerQuerier.class.getPackage().getName());
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServerQuerier.class);	
+
 	public static void launchQuery(String base64Img, String prompt)  {
-		System.out.println("QUERYING");
-		System.out.println(prompt);
+		LOGGER.info("---------NEW QUERY-----------");
+		LOGGER.info(prompt);
+		LOGGER.info("-----------------------------");
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		ImageData imageData = ImageData.builder()
@@ -30,7 +32,7 @@ public class ServerQuerier {
 								.build();
 		Body body = Body.builder()
 					.prompt(prompt)
-					.temperature(0.1)
+					.temperature(1.0)
 					.imageData(List.of(imageData))
 					.build();
 
@@ -44,25 +46,14 @@ public class ServerQuerier {
 			      .build();
 			try {
 				HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-				System.out.println(response.body());
+				LOGGER.info(response.body());
 			} catch (IOException | InterruptedException e) {
-				LOGGER.log(Level.SEVERE, e.getLocalizedMessage());
+				LOGGER.error(e.getLocalizedMessage());
 			}
 			
 		} catch (JsonProcessingException e) {
-			LOGGER.log(Level.SEVERE, e.getLocalizedMessage());
+			LOGGER.error(e.getLocalizedMessage());
 		}
 
-	    
-
-
-	    
-		// launch llama.cpp llava server
-		//server -m E:\crea\txt\gguf\ggml-model-q5_k.gguf --mmproj E:\crea\txt\gguf\llava-13B-mmproj-model-f16.gguf -c 2048 --port 8080 -ngl 35 -mg 3 -t 20
-
-		
-		//open the directory E:\imgtestprjava
-		
-		//
 	}
 }

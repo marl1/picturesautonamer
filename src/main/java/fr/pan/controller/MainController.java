@@ -2,12 +2,14 @@ package fr.pan.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fr.pan.logging.OutputRedirector;
+import fr.pan.main.Main;
 import fr.pan.model.ServerLaunchInfos;
 import fr.pan.server.ServerLauncher;
-import fr.pan.utils.OutputRedirector;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -15,10 +17,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class MainController {
-	
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
+
 	@FXML
 	private VBox root;
 
@@ -34,6 +36,7 @@ public class MainController {
     @FXML
     public void initialize() {
     	System.setOut(new OutputRedirector(consoleOutput, System.out));
+    	LOGGER.info("Init GUI...");
     }
 	
 	@FXML

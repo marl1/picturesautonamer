@@ -1,7 +1,5 @@
-package fr.pan.utils;
+package fr.pan.logging;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 import javafx.application.Platform;
@@ -20,11 +18,8 @@ public class OutputRedirector extends PrintStream {
 
     @Override
     public void write(byte[] buf, int off, int len) {
-    	//System.out.println("this.getClass()" + this.getClass()); 
         super.write(buf, off, len);
-
         String msg = new String(buf, off, len);
-
         Platform.runLater( () -> textArea.appendText(msg));
     }
     

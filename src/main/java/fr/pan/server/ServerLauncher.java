@@ -7,23 +7,25 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.pan.model.ServerLaunchInfos;
-import javafx.concurrent.Task;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.resizers.configurations.Antialiasing;
 
 public class ServerLauncher {
 	
-	private static final Logger LOGGER = Logger.getLogger(ServerLauncher.class.getPackage().getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ServerQuerier.class);	
 	
 	private static Process process;
 
@@ -38,74 +40,79 @@ public class ServerLauncher {
 
 		try {
 			process = processBuilder.start();
-	        String line;
-	        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-	        try {
-		        while ((line = reader.readLine()) != null) {
-		            System.out.println ("[llamacpp] " + line);
-		            if(line.startsWith("llama server listening at ")) {
-		            	    	List<Path> fileList = listFiles(serverLaunchInfos);
-		            	    	System.out.println("There is " + fileList.size() + " image(s) to process.");
-		            			System.out.println("Going to stop the process descendants (subprocesses) " + process.descendants().collect(Collectors.toList()));
-
-		            	    	processFiles(serverLaunchInfos, process, fileList);
-		            	     }
-		        }
-	        	} catch (IOException e) {
-					LOGGER.log(Level.WARNING, "Cannot connect to Llamacpp output.");
-				}
 		} catch (IOException e) {
-			LOGGER.log(Level.SEVERE, "Cannot start launchLlavaServer.bat.");
+			LOGGER.error("Cannot start launchLlavaServer.bat.");
 		}
+		
+        String line;
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+	        while ((line = reader.readLine()) != null) {
+	            LOGGER.info("[llamacpp] {}", line);
+	            if(line.startsWith("llama server listening at ")) {
+	            	    	List<Path> fileList = listFiles(serverLaunchInfos);
+	            	    	LOGGER.info("There is {} image(s) to process.", fileList.size());
+	            	    	processFiles(serverLaunchInfos, process, fileList);
+	            	     }
+	        }
+    	} catch (IOException e) {
+			LOGGER.error("Cannot connect to Llamacpp output.");
+		}
+
 
 	}
 
 	private static void processFiles(ServerLaunchInfos serverLaunchInfos, Process process, List<Path> fileList) {
 		ExecutorService service = Executors.newSingleThreadExecutor();
 		 for(Path p: fileList) {
-			service.submit(() -> ServerQuerier.launchQuery(getImgInBase64(p), serverLaunchInfos.getPrompt()));
+			 if(getImgInBase64(p).isPresent()) {
+				 service.submit(() -> ServerQuerier.launchQuery(getImgInBase64(p).get(), serverLaunchInfos.getPrompt()));
+		 	 }
 		 }
 		 service.submit(() -> destroyServerProcess());
 			
 	}
 	
-	private static List<Path> listFiles(ServerLaunchInfos serverLaunchInfos) throws IOException {
+	private static List<Path> listFiles(ServerLaunchInfos serverLaunchInfos) {
+		List<Path> listToReturn = new ArrayList<>();
 	    try (Stream<Path> stream = Files.list(Paths.get(serverLaunchInfos.getFolderToAnalyze()))) {
-	         return stream
-	        		 	.filter(file -> !Files.isDirectory(file))
-	        		 	.toList();
+	    	listToReturn.addAll(stream
+	        		 				.filter(file -> !Files.isDirectory(file))
+	        		 				.toList());
 	    } catch (IOException e) {
-			throw e;
+			LOGGER.error("FAILED to read the folder {}", serverLaunchInfos.getFolderToAnalyze());
 		}
+	    return listToReturn;
 	}
 	
-	private static String getImgInBase64(Path path) {
+	private static Optional<String> getImgInBase64(Path path) {
+		String toReturn;
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
 			Thumbnails.of(path.toFile())
 									.size(300, 300)
 									.antialiasing(Antialiasing.ON)
 									.toOutputStream(os);
-			return Base64.getEncoder().encodeToString(os.toByteArray());
+			toReturn = Base64.getEncoder().encodeToString(os.toByteArray());
 		} catch (IOException e) {
-			return null; //TODO
+			LOGGER.error("FAILED to get base64 of {}", path);
+			toReturn = null;
 		}
+		return Optional.of(toReturn);
 	}
 
 	private static void destroyServerProcess()  {
-		System.out.println("destroy !!!");
-		System.out.println("Going to stop the process descendants (subprocesses) " + process.descendants().collect(Collectors.toList()));
+		LOGGER.info("Stopping the llamacpp process...");
+		LOGGER.info("Going to stop the process descendants (subprocesses) " + process.descendants().collect(Collectors.toList()));
 		process.descendants().forEach((ProcessHandle d) -> {
 		    d.destroy();
 		});
-		System.out.println("Going to stop the process " + process);
+		LOGGER.info("Going to stop the process " + process);
 		process.destroy();
 		try {
 			process.getErrorStream().close();
 			process.getInputStream().close();
 			process.getOutputStream().close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(); 
+			LOGGER.error("Cannot close the llamacpp streams.");
 		}
 	}
 	
