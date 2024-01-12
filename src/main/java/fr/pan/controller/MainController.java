@@ -49,7 +49,6 @@ public class MainController {
 	private void startConversionClicked() throws IOException {
 		
 		Task<Boolean> task = new Task<Boolean>() {
-
 		    @Override
 		    protected Boolean call() throws Exception {
 				ServerLauncher.launch(new ServerLaunchInfos(inputFolder.getText(), prompt.getText()));

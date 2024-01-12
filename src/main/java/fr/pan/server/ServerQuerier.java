@@ -20,6 +20,7 @@ public class ServerQuerier {
 	private static final Logger LOGGER = Logger.getLogger(ServerQuerier.class.getPackage().getName());
 	
 	public static void launchQuery(String base64Img, String prompt)  {
+		System.out.println("QUERYING");
 		System.out.println(prompt);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
