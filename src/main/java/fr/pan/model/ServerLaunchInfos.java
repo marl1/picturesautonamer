@@ -12,6 +12,4 @@ public class ServerLaunchInfos {
 
 	private final String prompt;
 
-	private final TextArea guiConsoleOutput;
-
 }

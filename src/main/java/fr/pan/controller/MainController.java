@@ -2,9 +2,11 @@ package fr.pan.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import fr.pan.model.ServerLaunchInfos;
 import fr.pan.server.ServerLauncher;
+import fr.pan.utils.OutputRedirector;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -29,6 +31,10 @@ public class MainController {
 	@FXML
 	private TextArea consoleOutput;
 	
+    @FXML
+    public void initialize() {
+    	System.setOut(new OutputRedirector(consoleOutput, System.out));
+    }
 	
 	@FXML
 	private void chooseFolderClicked() throws IOException {
@@ -46,11 +52,7 @@ public class MainController {
 
 		    @Override
 		    protected Boolean call() throws Exception {
-				ServerLauncher.launch(new ServerLaunchInfos(
-						inputFolder.getText(),
-						prompt.getText(),
-						consoleOutput)
-				);
+				ServerLauncher.launch(new ServerLaunchInfos(inputFolder.getText(), prompt.getText()));
 				return true;
 		    }
 
