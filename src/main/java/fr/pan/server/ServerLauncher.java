@@ -11,15 +11,19 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.pan.model.RenamingInfos;
 import fr.pan.model.ServerLaunchInfos;
+import fr.pan.util.Renamer;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.resizers.configurations.Antialiasing;
 
@@ -63,11 +67,21 @@ public class ServerLauncher {
 
 	private static void processFiles(ServerLaunchInfos serverLaunchInfos, Process process, List<Path> fileList) {
 		ExecutorService service = Executors.newSingleThreadExecutor();
+		List<RenamingInfos> renamingInfosList = new ArrayList<>();
 		 for(Path p: fileList) {
 			 if(getImgInBase64(p).isPresent()) {
-				 service.submit(() -> ServerQuerier.launchQuery(getImgInBase64(p).get(), serverLaunchInfos.getPrompt()));
+				 Future<String> newName = service.submit(() -> ServerQuerier.launchQuery(getImgInBase64(p).get(), serverLaunchInfos.getPrompt()));
+				 try {
+					renamingInfosList.add(new RenamingInfos(p, newName.get()));
+				} catch (InterruptedException | ExecutionException e) {
+					LOGGER.error("Couln't get a generated name for {}", p);
+				}
 		 	 }
 		 }
+		 System.out.println(renamingInfosList.get(0).getOldPath());
+		 System.out.println(renamingInfosList.get(0).getOldPath().getParent());
+		 System.out.println(renamingInfosList.get(0).getNewFileName());
+		 service.submit(() -> Renamer.rename(renamingInfosList));
 		 service.submit(() -> destroyServerProcess());
 			
 	}

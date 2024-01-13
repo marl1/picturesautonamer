@@ -12,6 +12,7 @@ open module fr.pan {
 	requires java.desktop;
 	requires org.slf4j;
 	requires ch.qos.logback.core;
+	requires org.apache.commons.text;
 	exports fr.pan.main;
 	exports fr.pan.controller;
 }

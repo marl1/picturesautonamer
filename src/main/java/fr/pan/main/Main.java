@@ -42,3 +42,6 @@ public class Main extends Application {
 		});
     }
 }
+
+// a handy trick to launch JavaFX without using maven nor modules https://stackoverflow.com/questions/56551876/, that makes it easier to launch in debug
+class JFXEasyLauncher {public static void main(String[] args) throws IOException, InterruptedException {Main.main(args);}}

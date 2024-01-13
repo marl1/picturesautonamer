@@ -12,41 +12,51 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.pan.model.ImageData;
-import fr.pan.model.query.Body;
+import fr.pan.model.query.QueryBody;
+import fr.pan.model.response.ResponseBody;
+import fr.pan.model.query.ImageData;
 
 public class ServerQuerier {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerQuerier.class);	
 
-	public static void launchQuery(String base64Img, String prompt)  {
+	public static String launchQuery(String base64Img, String prompt)  {
+		String stringToReturn = "";
 		LOGGER.info("---------NEW QUERY-----------");
 		LOGGER.info(prompt);
 		LOGGER.info("-----------------------------");
 		
 		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ImageData imageData = ImageData.builder()
 								.data(base64Img)
 								.id(1)
 								.build();
-		Body body = Body.builder()
+		QueryBody body = QueryBody.builder()
 					.prompt(prompt)
-					.temperature(1.0)
+					.temperature(0.01)
+					.top_k(1.0)
+					.top_p(0.01)
 					.imageData(List.of(imageData))
 					.build();
+		
 
 		//quick test
 	    HttpClient client = HttpClient.newHttpClient();
 	    HttpRequest request;
 		try {
+			String bodyInString = objectMapper.writeValueAsString(body);
 			request = HttpRequest.newBuilder()
 			      .uri(URI.create("http://127.0.0.1:8080/completion"))
-			      .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(body)))
+			      .POST(HttpRequest.BodyPublishers.ofString(bodyInString))
 			      .build();
 			try {
 				HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+				ResponseBody r = objectMapper.readValue(response.body(), ResponseBody.class);	
 				LOGGER.info(response.body());
+				stringToReturn = r.content();
 			} catch (IOException | InterruptedException e) {
 				LOGGER.error(e.getLocalizedMessage());
 			}
@@ -54,6 +64,6 @@ public class ServerQuerier {
 		} catch (JsonProcessingException e) {
 			LOGGER.error(e.getLocalizedMessage());
 		}
-
+		return stringToReturn;
 	}
 }

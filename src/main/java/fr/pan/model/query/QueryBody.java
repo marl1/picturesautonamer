@@ -4,11 +4,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import fr.pan.model.ImageData;
 import lombok.Builder;
 
 @Builder
-public record Body(String prompt, Double temperature, List<ImageData> imageData) {
+public record QueryBody(String prompt, Double temperature, Double top_k, Double top_p, List<ImageData> imageData) {
 	
 	@JsonProperty("image_data")
 	public List<ImageData> getImageData() {
