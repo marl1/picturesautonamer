@@ -42,8 +42,7 @@ build_artifacts:
   image: maven:3.8.4-openjdk-17
   stage: build
   script:
-      - mvn clean javafx:jlink
-      - echo "Release de " $FULL_NAME
+      - mvn clean install
   artifacts:
     name: $FULL_NAME
     paths:
