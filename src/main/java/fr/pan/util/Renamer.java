@@ -26,9 +26,7 @@ public class Renamer {
 			try {
 				Files.move(renamingInfos.getOldPath(), renamingInfos.getOldPath().getParent().resolve(renamingInfos.getNewFileName()));
 			} catch (IOException e) {
-				
-				LOGGER.error("Couldn't rename {}", renamingInfos);
-				LOGGER.error(e.getMessage());
+				LOGGER.error("Couldn't rename {}", renamingInfos.getOldPath().toString());
 			}
 		}
 		

@@ -111,7 +111,6 @@
 					<noManPages>true</noManPages>
 					<launcher>PicturesAutoNamer</launcher>
 					<jlinkImageName>PicturesAutoNamer</jlinkImageName>
-
 					<mainClass>fr.pan.main.Main</mainClass>
 				</configuration>
 
