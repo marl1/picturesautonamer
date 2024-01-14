@@ -14,4 +14,4 @@ A Java frontend using llamacpp and local LLaVA LLM to **rename pictures accordin
 * Rename the file after having cleaned up LLaVA's answer and accounted for duplicate
 
 ## INSTALLATION
-* To write
+* TODO
