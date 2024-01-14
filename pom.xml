@@ -58,20 +58,23 @@
 			<artifactId>maven-jar-plugin</artifactId>
 			<version>3.3.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-core</artifactId>
-			<version>1.3.5</version>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>2.0.11</version>
 		</dependency>
+			<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>2.0.4</version>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-classic</artifactId>
+		    <version>1.4.14</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.3.5</version>
+		    <groupId>ch.qos.logback</groupId>
+		    <artifactId>logback-core</artifactId>
+		    <version>1.4.14</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
 		<dependency>
@@ -144,7 +147,7 @@
 						<configuration>
 						<overwriteExistingFiles>true</overwriteExistingFiles>
 							<outputDirectory>${project.build.directory}${file.separator}modules</outputDirectory>
-							<modules>
+							<modules>						
 								<module>
 									<artifact>
 										<groupId>net.coobird</groupId>
@@ -270,6 +273,8 @@
 							<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_17u_2024-01-14-16-16_linux_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
 							<jlinkImageName>${project.name}-${project.version}-linux</jlinkImageName>
 							<jlinkZipName>${project.name}-${project.version}-linux</jlinkZipName>
+							<bindServices>true</bindServices>
+							<runtimePathOption>MODULEPATH</runtimePathOption>
 						</configuration>
 					</execution>
 					<execution>
@@ -289,6 +294,8 @@
 							<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_17u_2024-01-14-16-16_windows_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
 							<jlinkImageName>${project.name}-${project.version}-win</jlinkImageName>
 							<jlinkZipName>${project.name}-${project.version}-win</jlinkZipName>
+							<bindServices>true</bindServices>
+							<runtimePathOption>MODULEPATH</runtimePathOption>
 						</configuration>
 					</execution>
 				</executions>
