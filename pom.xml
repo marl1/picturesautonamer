@@ -52,6 +52,18 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>21.0.1</version>
 		</dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21.0.1</version>
+            <classifier>win</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21.0.1</version>
+            <classifier>linux</classifier>
+        </dependency>	
 		<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
