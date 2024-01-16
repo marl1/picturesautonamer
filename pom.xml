@@ -135,7 +135,7 @@
 							<provider>BELLSOFT</provider>
 							<providerConfig>
 								<version>17.0.9+11</version>
-								<arch>amd64</arch>
+								<arch>amd64-full</arch>
 								<type>jdk</type>
 								<impl>hotspot</impl>
 								<os>linux</os>
@@ -154,7 +154,7 @@
 							<provider>BELLSOFT</provider>
 							<providerConfig>
 								<version>17.0.9+11</version>
-								<arch>amd64</arch>
+								<arch>amd64-full</arch>
 								<type>jdk</type>
 								<impl>hotspot</impl>
 								<os>windows</os>
