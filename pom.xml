@@ -132,10 +132,10 @@
 						<configuration>
 							<jdkPathProperty>jlink.jdk.path</jdkPathProperty>
 							<jdkCachePath>${project.build.directory}${file.separator}jdkCache</jdkCachePath>
-							<provider>ADOPTIUM</provider>
+							<provider>BELLSOFT</provider>
 							<providerConfig>
-								<version>17U</version>
-								<arch>x64</arch>
+								<version>17.0.9+11</version>
+								<arch>amd64</arch>
 								<type>jdk</type>
 								<impl>hotspot</impl>
 								<os>linux</os>
@@ -151,10 +151,10 @@
 						</goals>
 						<configuration>
 							<jdkCachePath>${project.build.directory}${file.separator}jdkCache</jdkCachePath>
-							<provider>ADOPTIUM</provider>
+							<provider>BELLSOFT</provider>
 							<providerConfig>
-								<version>17U</version>
-								<arch>x64</arch>
+								<version>17.0.9+11</version>
+								<arch>amd64</arch>
 								<type>jdk</type>
 								<impl>hotspot</impl>
 								<os>windows</os>
@@ -302,7 +302,7 @@
 							<jlinkImageName>PicturesAutoNamer</jlinkImageName>
 							<mainClass>fr.pan.main.Main</mainClass>
 							<!-- Here we point to the downloaded linux JDK from mvn-jlink-wrapper and also the modules created by moditect -->
-							<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_17u_2024-01-14-16-16_linux_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
+							<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}LIBERICA_jdk17.0.9+11_linux_amd64${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
 							<jlinkImageName>${project.name}-${project.version}-linux</jlinkImageName>
 							<jlinkZipName>${project.name}-${project.version}-linux</jlinkZipName>
 							<bindServices>true</bindServices>
@@ -323,7 +323,7 @@
 							<jlinkImageName>PicturesAutoNamer</jlinkImageName>
 							<mainClass>fr.pan.main.Main</mainClass>
 							<!-- Here we point to the downloaded windows JDK from mvn-jlink-wrapper and also the modules created by moditect -->
-							<!-- <jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_17u_2024-01-14-16-16_windows_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>-->
+							<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}LIBERICA_jdk17.0.9+11_windows_amd64${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
 							<jlinkImageName>${project.name}-${project.version}-win</jlinkImageName>
 							<jlinkZipName>${project.name}-${project.version}-win</jlinkZipName>
 							<bindServices>true</bindServices>
