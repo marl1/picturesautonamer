@@ -323,7 +323,7 @@
 							<jlinkImageName>PicturesAutoNamer</jlinkImageName>
 							<mainClass>fr.pan.main.Main</mainClass>
 							<!-- Here we point to the downloaded windows JDK from mvn-jlink-wrapper and also the modules created by moditect -->
-							<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_17u_2024-01-14-16-16_windows_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
+							<!-- <jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_17u_2024-01-14-16-16_windows_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>-->
 							<jlinkImageName>${project.name}-${project.version}-win</jlinkImageName>
 							<jlinkZipName>${project.name}-${project.version}-win</jlinkZipName>
 							<bindServices>true</bindServices>
