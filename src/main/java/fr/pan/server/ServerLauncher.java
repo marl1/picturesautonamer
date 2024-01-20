@@ -37,7 +37,7 @@ public class ServerLauncher {
 		Path currentRelativePath = Paths.get("");
 		String s = currentRelativePath.toAbsolutePath().toString();
 		System.out.println("Current absolute path is: " + s);
-	    ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", currentRelativePath.resolve("mockBat.bat").toAbsolutePath().toString());
+	    ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", currentRelativePath.resolve("llamacpp").resolve("launchLlavaServer.bat").toAbsolutePath().toString());
 
         processBuilder.redirectInput();
         processBuilder.redirectOutput();
