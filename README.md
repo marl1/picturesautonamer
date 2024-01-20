@@ -16,7 +16,7 @@ A Java frontend using llamacpp and local LLaVA LLM to **rename pictures accordin
 ## INSTALLATION
 * Download the latest package [on the release page](https://gitlab.com/marclv/picturesautonamer/-/releases).
 * Download [mmproj-model-f16.gguf](https://huggingface.co/PsiPi/liuhaotian_llava-v1.5-13b-GGUF/blob/main/mmproj-model-f16.gguf) and rename it to llava-13B-mmproj-model-f16.gguf
-* Download [ggml-model-q5_k.gguf] and rename it to ggml-model-q5_k.gguf
+* Download [ggml-model-q5_k.gguf](https://huggingface.co/mys/ggml_llava-v1.5-13b/blob/main/ggml-model-q5_k.gguf)
 * Unzip the package.
 * Put the 2 renamed models in llama/models
 * Launch PicturesAutoNamer.bat
@@ -24,5 +24,7 @@ A Java frontend using llamacpp and local LLaVA LLM to **rename pictures accordin
 
 ## TO DO
 * Handle the case where the name chosen by LLaVA collide with an already existing name
-* More images formats
+* More images formats (webp!!)
+* Sub-directories
+* Linux version
 * "About" popup
