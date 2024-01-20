@@ -9,6 +9,7 @@
 		<maven.compiler.target>17</maven.compiler.target>
 		<maven.compiler.source>17</maven.compiler.source>
 		<lombok.version>1.18.30</lombok.version>
+		<javaFX.version>21.0.1</javaFX.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -38,20 +39,20 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>21.0.1</version>
+			<version>${javaFX.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx</artifactId>
-			<version>21.0.1</version>
+			<version>${javaFX.version}</version>
 			<type>pom</type>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
-			<version>21.0.1</version>
+			<version>${javaFX.version}</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
@@ -473,7 +474,7 @@
 									<goal>copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${basedir}/target/PicturesAutoNamer-0.0.1-SNAPSHOT-win/llamacpp</outputDirectory>
+									<outputDirectory>${basedir}/target/${project.name}-${project.version}-win/llamacpp</outputDirectory>
 									<resources>
 										<resource>
 											<directory>llamacpp</directory>
@@ -489,7 +490,7 @@
 									<goal>copy-resources</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${basedir}/target/PicturesAutoNamer-0.0.1-SNAPSHOT-win</outputDirectory>
+									<outputDirectory>${basedir}/target/${project.name}-${project.version}-win</outputDirectory>
 									<resources>
 										<resource>
 											<directory>scripts/win</directory>
