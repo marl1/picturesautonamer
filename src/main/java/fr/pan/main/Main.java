@@ -20,8 +20,13 @@ public class Main extends Application {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
 	public static void main(String[] args) throws IOException, InterruptedException {
+		try {
 		LOGGER.info("PicturesAutoNamer is starting...");
 		launch();
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			throw e;
+		}
 	}
 
 	@Override

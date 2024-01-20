@@ -51,6 +51,9 @@ public class Renamer {
 			if (renamingInfos.getNewFileName().contains("_")) {
 				renamingInfos.setNewFileName(CaseUtils.toCamelCase(renamingInfos.getNewFileName(), false, new char[]{'_'}));
 			}
+			if (renamingInfos.getNewFileName().contains("-")) {
+				renamingInfos.setNewFileName(CaseUtils.toCamelCase(renamingInfos.getNewFileName(), false, new char[]{'_'}));
+			}
 			
 			//The LLM gave an extension? We remove it.
 			if(ImageFileTypes.COMMON_TYPES.stream().anyMatch(type -> renamingInfos.getNewFileName().endsWith(type))) {

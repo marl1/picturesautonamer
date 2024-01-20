@@ -42,9 +42,9 @@ build_artifacts:
   image: maven:3.8.4-openjdk-17
   stage: build
   script:
-      - mvn clean install
+      - 'mvn clean install -Djavafx.platform=win -P windows-build,dl-windows-jdk'
+      - 'ls target'
   artifacts:
     name: $FULL_NAME
     paths:
-      - target/${FULL_NAME}-linux/*
       - target/${FULL_NAME}-win/*
