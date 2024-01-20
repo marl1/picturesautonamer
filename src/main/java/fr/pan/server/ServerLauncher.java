@@ -74,8 +74,10 @@ public class ServerLauncher {
 		List<RenamingInfos> renamingInfosList = new ArrayList<>();
 		 for(Path p: fileList) {
 			 LOGGER.info("Processing {}...", p);
-			 if(getImgInBase64(p).isPresent()) {
-				 String newName = ServerQuerier.launchQuery(getImgInBase64(p).get(), serverLaunchInfos.getPrompt());
+			 
+			 Optional<String> imgBase64 = getImgInBase64(p);
+			 if(imgBase64.isPresent()) {
+				 String newName = ServerQuerier.launchQuery(imgBase64.get(), serverLaunchInfos.getPrompt());
 					renamingInfosList.add(new RenamingInfos(p, newName));
 
 		 	 }
@@ -104,8 +106,6 @@ public class ServerLauncher {
 		String toReturn;
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
 			LOGGER.info("Generating thumbnail for {}...", path);
-			Thumbnails.of(path.toFile())
-			.size(300, 300).toOutputStream(os);
 			Thumbnails.of(path.toFile())
 									.size(300, 300)
 									.antialiasing(Antialiasing.ON)

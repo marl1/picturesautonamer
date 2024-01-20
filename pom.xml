@@ -211,6 +211,8 @@
 										    requires java.xml;
 											requires com.twelvemonkeys.imageio.core;
 										    requires transitive java.desktop;
+										    requires com.twelvemonkeys.common.lang;
+										    requires com.twelvemonkeys.imageio.metadata;
 										
 										    exports com.twelvemonkeys.imageio.plugins.jpeg;
 										
@@ -236,6 +238,7 @@
 									    requires java.xml;
 									
 									    requires transitive java.desktop;
+									    requires com.twelvemonkeys.common.lang;
 									
 									    exports com.twelvemonkeys.imageio.metadata;
 									    exports com.twelvemonkeys.imageio.metadata.exif;
