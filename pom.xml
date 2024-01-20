@@ -435,17 +435,32 @@
 		        <version>3.3.1</version>
 		        <executions>
 		          <execution>
-		            <id>copy-resources</id>
-		            <!-- here the phase you need -->
+		            <id>copy-llamacpp</id>
 		            <phase>install</phase>
 		            <goals>
 		              <goal>copy-resources</goal>
 		            </goals>
 		            <configuration>
-		              <outputDirectory>${basedir}/target/PicturesAutoNamer-0.0.1-SNAPSHOT-win/</outputDirectory>
+		              <outputDirectory>${basedir}/target/PicturesAutoNamer-0.0.1-SNAPSHOT-win/llamacpp</outputDirectory>
 		              <resources>          
 		                <resource>
 		                  <directory>llamacpp</directory>
+		                  <filtering>false</filtering>
+		                </resource>
+		              </resources>              
+		            </configuration>            
+		          </execution>
+		          <execution>
+		            <id>copy-scripts</id>
+		            <phase>install</phase>
+		            <goals>
+		              <goal>copy-resources</goal>
+		            </goals>
+		            <configuration>
+		              <outputDirectory>${basedir}/target/PicturesAutoNamer-0.0.1-SNAPSHOT-win</outputDirectory>
+		              <resources>          
+		                <resource>
+		                  <directory>scripts</directory>
 		                  <filtering>false</filtering>
 		                </resource>
 		              </resources>              
