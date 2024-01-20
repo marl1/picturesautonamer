@@ -24,8 +24,10 @@ import org.slf4j.LoggerFactory;
 import fr.pan.model.RenamingInfos;
 import fr.pan.model.ServerLaunchInfos;
 import fr.pan.util.Renamer;
+import net.coobird.thumbnailator.Thumbnailator;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.resizers.configurations.Antialiasing;
+import net.coobird.thumbnailator.util.ThumbnailatorUtils;
 
 public class ServerLauncher {
 	
@@ -71,6 +73,7 @@ public class ServerLauncher {
 		ExecutorService service = Executors.newSingleThreadExecutor();
 		List<RenamingInfos> renamingInfosList = new ArrayList<>();
 		 for(Path p: fileList) {
+			 LOGGER.info("Processing {}...", p);
 			 if(getImgInBase64(p).isPresent()) {
 				 String newName = ServerQuerier.launchQuery(getImgInBase64(p).get(), serverLaunchInfos.getPrompt());
 					renamingInfosList.add(new RenamingInfos(p, newName));
@@ -100,15 +103,20 @@ public class ServerLauncher {
 	private static Optional<String> getImgInBase64(Path path) {
 		String toReturn;
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
+			LOGGER.info("Generating thumbnail for {}...", path);
+			Thumbnails.of(path.toFile())
+			.size(300, 300).toOutputStream(os);
 			Thumbnails.of(path.toFile())
 									.size(300, 300)
 									.antialiasing(Antialiasing.ON)
 									.toOutputStream(os);
+			LOGGER.info("Generated. Getting base64 encoding...", path);
 			toReturn = Base64.getEncoder().encodeToString(os.toByteArray());
 		} catch (Exception e) {
 			LOGGER.error("FAILED to get base64 of {}", path);
 			return Optional.empty();
 		}
+		LOGGER.info("OK.", path);
 		return Optional.of(toReturn);
 	}
 
