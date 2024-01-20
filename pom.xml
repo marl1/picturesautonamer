@@ -38,6 +38,7 @@
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
 			<version>21.0.1</version>
+			<classifier>win</classifier>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
 		<dependency>
@@ -51,6 +52,7 @@
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
 			<version>21.0.1</version>
+			<classifier>win</classifier>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
@@ -99,7 +101,7 @@
 				<artifactId>mvn-jlink-wrapper</artifactId>
 				<version>1.2.1</version>
 				<executions>
-					<execution>
+					<!--<execution>
 						<phase>prepare-package</phase>
 						<id>cache-jdk-17-linux</id>
 						<goals>
@@ -118,7 +120,7 @@
 								<build>2024-01-14-16-16</build>
 							</providerConfig>
 						</configuration>
-					</execution>
+					</execution>-->
 					<execution>
 						<phase>prepare-package</phase>
 						<id>cache-jdk-17-windows</id>
@@ -384,7 +386,7 @@
 				</configuration>
 				<!-- The following executions are used to compile/package the app for distribution -->
 				<executions>
-					<execution>
+					<!-- <execution>
 						<id>linux-build</id>
 						<phase>install</phase>
 						<goals>
@@ -396,15 +398,15 @@
 							<noManPages>true</noManPages>
 							<launcher>PicturesAutoNamer</launcher>
 							<jlinkImageName>PicturesAutoNamer</jlinkImageName>
-							<mainClass>fr.pan.main.Main</mainClass>
+							<mainClass>fr.pan.main.Main</mainClass>-->
 							<!-- Here we point to the downloaded linux JDK from mvn-jlink-wrapper and also the modules created by moditect -->
-							<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_17u_2024-01-14-16-16_linux_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
+							<!--<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_17u_2024-01-14-16-16_linux_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
 							<jlinkImageName>${project.name}-${project.version}-linux</jlinkImageName>
 							<jlinkZipName>${project.name}-${project.version}-linux</jlinkZipName>
 							<bindServices>true</bindServices>
 							<runtimePathOption>MODULEPATH</runtimePathOption>
 						</configuration>
-					</execution>
+					</execution>-->
 					<execution>
 						<id>windows-build</id>
 						<goals>
@@ -433,32 +435,17 @@
 		        <version>3.3.1</version>
 		        <executions>
 		          <execution>
-		            <id>copy-llamacpp</id>
+		            <id>copy-resources</id>
+		            <!-- here the phase you need -->
 		            <phase>install</phase>
 		            <goals>
 		              <goal>copy-resources</goal>
 		            </goals>
 		            <configuration>
-		              <outputDirectory>${basedir}/target/PicturesAutoNamer-0.0.1-SNAPSHOT-win/llamacpp</outputDirectory>
+		              <outputDirectory>${basedir}/target/PicturesAutoNamer-0.0.1-SNAPSHOT-win/</outputDirectory>
 		              <resources>          
 		                <resource>
 		                  <directory>llamacpp</directory>
-		                  <filtering>false</filtering>
-		                </resource>
-		              </resources>              
-		            </configuration>            
-		          </execution>
-		          <execution>
-		            <id>copy-scripts</id>
-		            <phase>install</phase>
-		            <goals>
-		              <goal>copy-resources</goal>
-		            </goals>
-		            <configuration>
-		              <outputDirectory>${basedir}/target/PicturesAutoNamer-0.0.1-SNAPSHOT-win</outputDirectory>
-		              <resources>          
-		                <resource>
-		                  <directory>scripts</directory>
 		                  <filtering>false</filtering>
 		                </resource>
 		              </resources>              
