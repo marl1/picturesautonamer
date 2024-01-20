@@ -42,7 +42,7 @@ build_artifacts:
   image: maven:3.8.4-openjdk-17
   stage: build
   script:
-      - mvn clean install
+      - mvn clean install -Djavafx.platform=win
   artifacts:
     name: $FULL_NAME
     paths:
