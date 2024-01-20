@@ -52,29 +52,24 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>21.0.1</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-jar-plugin</artifactId>
-			<version>3.3.0</version>
-		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-		    <version>2.0.11</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.11</version>
 		</dependency>
-			<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
 		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-classic</artifactId>
-		    <version>1.4.14</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.4.14</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
 		<dependency>
-		    <groupId>ch.qos.logback</groupId>
-		    <artifactId>logback-core</artifactId>
-		    <version>1.4.14</version>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.4.14</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
 		<dependency>
@@ -82,17 +77,30 @@
 			<artifactId>commons-text</artifactId>
 			<version>1.11.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-jpeg -->
+		<!-- To handle more JPEG types. -->
+		<dependency>
+			<groupId>com.twelvemonkeys.imageio</groupId>
+			<artifactId>imageio-jpeg</artifactId>
+			<version>3.10.1</version>
+		</dependency>
+
 	</dependencies>
 	<build>
-		 <plugins>
+		<plugins>
 			<plugin>
-			    <groupId>com.igormaznitsa</groupId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.2.0</version>
+			</plugin>
+			<plugin>
+				<groupId>com.igormaznitsa</groupId>
 				<!-- Plugin to download other plateform JDK, thus enabling jlink to generate image for all platforms-->
 				<artifactId>mvn-jlink-wrapper</artifactId>
 				<version>1.2.1</version>
 				<executions>
 					<execution>
-					<phase>prepare-package</phase>
+						<phase>prepare-package</phase>
 						<id>cache-jdk-17-linux</id>
 						<goals>
 							<goal>cache-jdk</goal>
@@ -112,7 +120,7 @@
 						</configuration>
 					</execution>
 					<execution>
-					<phase>prepare-package</phase>
+						<phase>prepare-package</phase>
 						<id>cache-jdk-17-windows</id>
 						<goals>
 							<goal>cache-jdk</goal>
@@ -145,9 +153,9 @@
 							<goal>add-module-info</goal>
 						</goals>
 						<configuration>
-						<overwriteExistingFiles>true</overwriteExistingFiles>
+							<overwriteExistingFiles>true</overwriteExistingFiles>
 							<outputDirectory>${project.build.directory}${file.separator}modules</outputDirectory>
-							<modules>						
+							<modules>
 								<module>
 									<artifact>
 										<groupId>net.coobird</groupId>
@@ -238,6 +246,126 @@
 								}
                         </moduleInfoSource>
 								</module>
+								<module>
+									<artifact>
+										<groupId>com.twelvemonkeys.imageio</groupId>
+										<artifactId>imageio-jpeg</artifactId>
+										<version>3.10.1</version>
+									</artifact>
+									<moduleInfoSource>
+										module com.twelvemonkeys.imageio.jpeg {
+										    requires java.xml;
+										
+										    requires transitive java.desktop;
+										
+										    exports com.twelvemonkeys.imageio.plugins.jpeg;
+										
+										    provides javax.imageio.spi.ImageReaderSpi with
+										        com.twelvemonkeys.imageio.plugins.jpeg.JPEGImageReaderSpi;
+										    provides javax.imageio.spi.ImageWriterSpi with
+										        com.twelvemonkeys.imageio.plugins.jpeg.JPEGImageWriterSpi;
+										
+										}
+                     				   </moduleInfoSource>
+								</module>
+								<module>
+									<artifact>
+
+										<groupId>com.twelvemonkeys.imageio</groupId>
+										<artifactId>imageio-metadata</artifactId>
+										<version>3.10.1</version>
+
+
+									</artifact>
+									<moduleInfoSource>
+									module com.twelvemonkeys.imageio.metadata {
+									    requires java.xml;
+									
+									    requires transitive java.desktop;
+									
+									    exports com.twelvemonkeys.imageio.metadata;
+									    exports com.twelvemonkeys.imageio.metadata.exif;
+									    exports com.twelvemonkeys.imageio.metadata.iptc;
+									    exports com.twelvemonkeys.imageio.metadata.jpeg;
+									    exports com.twelvemonkeys.imageio.metadata.psd;
+									    exports com.twelvemonkeys.imageio.metadata.tiff;
+									    exports com.twelvemonkeys.imageio.metadata.xmp;
+									
+									}
+									</moduleInfoSource>
+								</module>
+								<module>
+									<artifact>
+
+										<groupId>com.twelvemonkeys.common</groupId>
+										<artifactId>common-lang</artifactId>
+										<version>3.10.1</version>
+
+
+									</artifact>
+									<moduleInfoSource>
+									module com.twelvemonkeys.common.lang {
+									    requires transitive java.desktop;
+									    requires transitive java.sql;
+									
+									    exports com.twelvemonkeys.lang;
+									    exports com.twelvemonkeys.util;
+									    exports com.twelvemonkeys.util.convert;
+									    exports com.twelvemonkeys.util.regex;
+									    exports com.twelvemonkeys.util.service;
+									
+									}
+                     			   </moduleInfoSource>
+								</module>
+								<module>
+									<artifact>
+										<groupId>com.twelvemonkeys.common</groupId>
+										<artifactId>common-io</artifactId>
+										<version>3.10.1</version>
+									</artifact>
+									<moduleInfoSource>
+									module com.twelvemonkeys.common.io {
+									    requires transitive java.desktop;
+									    requires transitive java.xml;
+									
+									    exports com.twelvemonkeys.io;
+									    exports com.twelvemonkeys.io.enc;
+									    exports com.twelvemonkeys.io.ole2;
+									    exports com.twelvemonkeys.net;
+									    exports com.twelvemonkeys.xml;
+									
+									}
+                        </moduleInfoSource>
+								</module>
+								<module>
+									<artifact>
+										<groupId>com.twelvemonkeys.imageio</groupId>
+										<artifactId>imageio-core</artifactId>
+										<version>3.10.1</version>
+									</artifact>
+									<moduleInfoSource>
+									module com.twelvemonkeys.imageio.core {
+									    requires java.datatransfer;
+									
+									    requires transitive java.desktop;
+									    requires transitive java.xml;
+									
+									    exports com.twelvemonkeys.imageio;
+									    exports com.twelvemonkeys.imageio.color;
+									    exports com.twelvemonkeys.imageio.spi;
+									    exports com.twelvemonkeys.imageio.stream;
+									    exports com.twelvemonkeys.imageio.util;
+									
+									    provides javax.imageio.spi.ImageInputStreamSpi with
+									        com.twelvemonkeys.imageio.stream.BufferedFileImageInputStreamSpi,
+									        com.twelvemonkeys.imageio.stream.BufferedRAFImageInputStreamSpi,
+									        com.twelvemonkeys.imageio.stream.BufferedInputStreamImageInputStreamSpi,
+									        com.twelvemonkeys.imageio.color.ProfileDeferralActivator.Spi;
+									
+									}
+
+                        </moduleInfoSource>
+								</module>
 							</modules>
 						</configuration>
 					</execution>
@@ -249,7 +377,7 @@
 				<artifactId>javafx-maven-plugin</artifactId>
 				<version>0.0.8</version>
 				<configuration>
-				<!-- This configuration is used when we launch the app manually using "mvn javafx:run"-->
+					<!-- This configuration is used when we launch the app manually using "mvn javafx:run"-->
 					<launcher>PicturesAutoNamer</launcher>
 					<jlinkImageName>PicturesAutoNamer</jlinkImageName>
 					<mainClass>fr.pan.main.Main</mainClass>
