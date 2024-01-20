@@ -58,8 +58,8 @@ public class ServerLauncher {
 	            	    	processFiles(serverLaunchInfos, process, fileList);
 	            	     }
 	        }
-    	} catch (IOException e) {
-			LOGGER.error("Cannot connect to Llamacpp output.");
+    	} catch (Exception e) {
+			LOGGER.error(e.getMessage());
 		}
 
 
@@ -70,12 +70,9 @@ public class ServerLauncher {
 		List<RenamingInfos> renamingInfosList = new ArrayList<>();
 		 for(Path p: fileList) {
 			 if(getImgInBase64(p).isPresent()) {
-				 Future<String> newName = service.submit(() -> ServerQuerier.launchQuery(getImgInBase64(p).get(), serverLaunchInfos.getPrompt()));
-				 try {
-					renamingInfosList.add(new RenamingInfos(p, newName.get()));
-				} catch (InterruptedException | ExecutionException e) {
-					LOGGER.error("Couln't get a generated name for {}", p);
-				}
+				 String newName = ServerQuerier.launchQuery(getImgInBase64(p).get(), serverLaunchInfos.getPrompt());
+					renamingInfosList.add(new RenamingInfos(p, newName));
+
 		 	 }
 		 }
 		 System.out.println(renamingInfosList.get(0).getOldPath());
@@ -106,9 +103,9 @@ public class ServerLauncher {
 									.antialiasing(Antialiasing.ON)
 									.toOutputStream(os);
 			toReturn = Base64.getEncoder().encodeToString(os.toByteArray());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			LOGGER.error("FAILED to get base64 of {}", path);
-			toReturn = null;
+			return Optional.empty();
 		}
 		return Optional.of(toReturn);
 	}
