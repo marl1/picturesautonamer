@@ -1,5 +1,6 @@
 package fr.pan.server;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,23 +12,20 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.imageio.ImageIO;
+
+import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.pan.model.RenamingInfos;
 import fr.pan.model.ServerLaunchInfos;
 import fr.pan.util.Renamer;
-import net.coobird.thumbnailator.Thumbnailator;
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.resizers.configurations.Antialiasing;
-import net.coobird.thumbnailator.util.ThumbnailatorUtils;
 
 public class ServerLauncher {
 	
@@ -106,10 +104,9 @@ public class ServerLauncher {
 		String toReturn;
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
 			LOGGER.info("Generating thumbnail for {}...", path);
-			Thumbnails.of(path.toFile())
-									.size(300, 300)
-									.antialiasing(Antialiasing.ON)
-									.toOutputStream(os);
+			BufferedImage originalImage = ImageIO.read(path.toFile());
+		    BufferedImage outputImage = Scalr.resize(originalImage, 300);
+		    ImageIO.write(outputImage, "jpeg", os);
 			LOGGER.info("Generated. Getting base64 encoding...", path);
 			toReturn = Base64.getEncoder().encodeToString(os.toByteArray());
 		} catch (Exception e) {
@@ -119,6 +116,8 @@ public class ServerLauncher {
 		LOGGER.info("OK.", path);
 		return Optional.of(toReturn);
 	}
+	
+	
 
 	private static void destroyServerProcess()  {
 		LOGGER.info("Stopping the llamacpp process...");
