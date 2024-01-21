@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.pan.logging.OutputRedirector;
-import fr.pan.main.Main;
 import fr.pan.model.ServerLaunchInfos;
 import fr.pan.server.ServerLauncher;
 import javafx.concurrent.Task;
@@ -17,7 +16,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import net.coobird.thumbnailator.util.ThumbnailatorUtils;
 
 public class MainController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
@@ -36,7 +34,6 @@ public class MainController {
 	
     @FXML
     public void initialize() {
-    	System.out.println(ThumbnailatorUtils.getSupportedOutputFormats());
     	System.setOut(new OutputRedirector(consoleOutput, System.out));
     	LOGGER.info("Init GUI...");
     }

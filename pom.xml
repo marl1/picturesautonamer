@@ -12,11 +12,6 @@
 		<javaFX.version>21.0.1</javaFX.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>net.coobird</groupId>
-			<artifactId>thumbnailator</artifactId>
-			<version>0.4.20</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -86,6 +81,19 @@
 			<artifactId>imageio-jpeg</artifactId>
 			<version>3.10.1</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-webp -->
+		<dependency>
+		    <groupId>com.twelvemonkeys.imageio</groupId>
+		    <artifactId>imageio-webp</artifactId>
+		    <version>3.10.1</version>
+		    <scope>runtime</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.imgscalr/imgscalr-lib -->
+		<dependency>
+		    <groupId>org.imgscalr</groupId>
+		    <artifactId>imgscalr-lib</artifactId>
+		    <version>4.2</version>
+		</dependency>
 
 	</dependencies>
 	<build>
@@ -113,30 +121,18 @@
 							<modules>
 								<module>
 									<artifact>
-										<groupId>net.coobird</groupId>
-										<artifactId>thumbnailator</artifactId>
-										<version>0.4.20</version>
+								    <groupId>org.imgscalr</groupId>
+								    <artifactId>imgscalr-lib</artifactId>
+								    <version>4.2</version>
 									</artifact>
 									<!-- I generated the module-info using "jdeps.exe dashdash generate-module-info out thumbnailator-0.4.20.jar" and copy/pasted here -->
 									<moduleInfoSource>
-									module net.coobird.thumbnailator {
-									    requires java.xml;
-									
-									    requires transitive java.desktop;
-									
-									    exports net.coobird.thumbnailator;
-									    exports net.coobird.thumbnailator.builders;
-									    exports net.coobird.thumbnailator.filters;
-									    exports net.coobird.thumbnailator.geometry;
-									    exports net.coobird.thumbnailator.makers;
-									    exports net.coobird.thumbnailator.name;
-									    exports net.coobird.thumbnailator.resizers;
-									    exports net.coobird.thumbnailator.resizers.configurations;
-									    exports net.coobird.thumbnailator.tasks;
-									    exports net.coobird.thumbnailator.tasks.io;
-									    exports net.coobird.thumbnailator.util;
-									    exports net.coobird.thumbnailator.util.exif;
-									}
+										module imgscalr.lib {
+										    requires transitive java.desktop;
+										
+										    exports org.imgscalr;
+										
+										}
 		                        </moduleInfoSource>
 								</module>
 								<module>
@@ -200,6 +196,29 @@
 								    exports org.apache.commons.lang3.util;
 								}
                         </moduleInfoSource>
+								</module>
+								<module>
+									<artifact>
+									    <groupId>com.twelvemonkeys.imageio</groupId>
+									    <artifactId>imageio-webp</artifactId>
+									    <version>3.10.1</version>
+									</artifact>
+									<moduleInfoSource>
+
+										module com.twelvemonkeys.imageio.webp {
+										    requires transitive java.desktop;
+											requires com.twelvemonkeys.imageio.core;
+											requires com.twelvemonkeys.common.lang;
+											requires com.twelvemonkeys.imageio.metadata;
+										    exports com.twelvemonkeys.imageio.plugins.webp;
+										    exports com.twelvemonkeys.imageio.plugins.webp.lossless;
+										    exports com.twelvemonkeys.imageio.plugins.webp.vp8;
+										
+										    provides javax.imageio.spi.ImageReaderSpi with
+										        com.twelvemonkeys.imageio.plugins.webp.WebPImageReaderSpi;
+
+										}
+                     				   </moduleInfoSource>
 								</module>
 								<module>
 									<artifact>

@@ -8,11 +8,11 @@ open module fr.pan {
 	requires com.fasterxml.jackson.databind;
 	requires static lombok;
 	requires javafx.base;
-	requires net.coobird.thumbnailator;
 	requires java.desktop;
 	requires org.slf4j;
 	requires ch.qos.logback.core;
 	requires org.apache.commons.text;
+	requires imgscalr.lib;
 	exports fr.pan.main;
 	exports fr.pan.controller;
 }

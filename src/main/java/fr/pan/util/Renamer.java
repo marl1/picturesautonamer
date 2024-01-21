@@ -25,7 +25,7 @@ public class Renamer {
 		for(RenamingInfos renamingInfos:clean(renamingInfosList)) {
 			try {
 				Files.move(renamingInfos.getOldPath(), renamingInfos.getOldPath().getParent().resolve(renamingInfos.getNewFileName()));
-			} catch (IOException e) {
+			} catch (Exception e) {
 				LOGGER.error("Couldn't rename {}", renamingInfos.getOldPath().toString());
 			}
 		}
@@ -47,12 +47,21 @@ public class Renamer {
 			//cleaning whitespaces at the start and the end 
 			renamingInfos.setNewFileName(renamingInfos.getNewFileName().trim());
 
-			//The LLM renamed in snake case? We force it in CamelCase.
+			//Removing forbidden filename char
+			renamingInfos.setNewFileName(renamingInfos.getNewFileName().replaceAll("[\\\\/:*?\"<>|]", ""));
+			
+			renamingInfos.setNewFileName(renamingInfos.getNewFileName().substring(0, 1).toUpperCase() + renamingInfos.getNewFileName().substring(1));
+			
+			//Force it in CamelCase.
 			if (renamingInfos.getNewFileName().contains("_")) {
-				renamingInfos.setNewFileName(CaseUtils.toCamelCase(renamingInfos.getNewFileName(), false, new char[]{'_'}));
+				renamingInfos.setNewFileName(CaseUtils.toCamelCase(renamingInfos.getNewFileName(), true, new char[]{'_'}));
 			}
 			if (renamingInfos.getNewFileName().contains("-")) {
-				renamingInfos.setNewFileName(CaseUtils.toCamelCase(renamingInfos.getNewFileName(), false, new char[]{'_'}));
+				renamingInfos.setNewFileName(CaseUtils.toCamelCase(renamingInfos.getNewFileName(), true, new char[]{'-'}));
+			}
+
+			if (renamingInfos.getNewFileName().contains(" ")) {
+				renamingInfos.setNewFileName(CaseUtils.toCamelCase(renamingInfos.getNewFileName(), true, new char[]{' '}));
 			}
 			
 			//The LLM gave an extension? We remove it.
@@ -77,7 +86,7 @@ public class Renamer {
 			//We readd the original extension
 			String oldFileName = renamingInfos.getOldPath().getFileName().toString();
 			renamingInfos.setNewFileName(renamingInfos.getNewFileName() + oldFileName.substring(oldFileName.lastIndexOf("."))); 
-			
+			LOGGER.info("{} will be renamed {}.",renamingInfos.getOldPath(), renamingInfos.getNewFileName());
 		}
 		return renamingInfosList;
 	}
