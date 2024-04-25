@@ -2,7 +2,7 @@
 
 A Java frontend using llamacpp and local LLaVA LLM to **rename pictures according to their content**.
 
-![](demo.mp4)
+![](https://gitlab.com/marclv/picturesautonamer/-/raw/master/demo.mp4?ref_type=heads)
 
 
 
