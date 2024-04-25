@@ -2,9 +2,8 @@
 
 A Java frontend using llamacpp and local LLaVA LLM to **rename pictures according to their content**.
 
-![](https://gitlab.com/marclv/picturesautonamer/-/raw/master/demo.mp4?ref_type=heads)
-
-
+![](demo.mp4)
+<video src="https://github.com/marl1/picturesautonamer/assets/23550999/8638ef79-61fb-4b08-8ab8-44dd6036f4f5" width="320" height="240" controls></video>
 
 ## FEATURES
 * Show a window to choose a folder
