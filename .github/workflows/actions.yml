@@ -26,9 +26,14 @@ jobs:
     - name: Generate artifact name
       id: generate-name
       run: |
-        echo "::set-output name=artifact::${{ github.event.repository.name }}.${{ github.ref_name }}.${{ github.run_id }}.zip"  
+        VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.1.1:evaluate -Dexpression=project.version -q -DforceStdout)
+        echo $VERSION
+        ARTIFACT_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.1.1:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+        echo $ARTIFACT_ID
+        export FULL_NAME=$(echo "$ARTIFACT_ID"-"$VERSION")
+        echo FULL_NAME=$FULL_NAME >> $GITHUB_OUTPUT 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ steps.generate-name.outputs.artifact }}
+        name: ${{ steps.generate-name.outputs.FULL_NAME }}
         path: target/*.jar
