@@ -1,0 +1,67 @@
+name: my-pretty-javafx-pipeline
+run-name: Testing the sample game with Playwright then deploy to GitHub pages
+# Will be launched in case of...
+on:
+  # ...a push.
+  push:
+    branches: ["githubPipelineTests"]
+    # ...a manual from the Actions tab
+    workflow_dispatch:
+jobs:
+  testing-cyoa-engine-using-playwright:
+    timeout-minutes: 60
+    runs-on: maven:3.8.4-openjdk-17
+    steps:
+    - name: building ny pretty artifact
+      run: |
+          mvn clean install -Djavafx.platform=win -P windows-build,dl-windows-jdk
+          echo "Using a timestamp to avoid browser cache..."
+          timestamp=$(date +%s)
+          sed -i "s,moteurldvelh.js,moteurldvelh.js?$timestamp," ./www/games/a_sample_game/index.htm
+          sed -i "s,moteurldvelh.js,moteurldvelh.js?$timestamp," ./www/games/cyberpunk/index.htm
+          echo ID_DU_JOB_DE_BUILD=$ID_DU_JOB_DE_BUILD >> mesVariables.env
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30
+  the-pretty-deployment:
+    needs: testing-cyoa-engine-using-playwright
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    environment:
+      # This "github-pages" environment is created automatically by GitHub
+      # check the deployment rules here https://github.com/marl1/cyoajsengine/settings/environments
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      # Git checkout on the master branch
+      - name: Checkout
+        uses: actions/checkout@v4        
+        with:
+          ref: master
+      - name: TimeStamping
+        run: |
+          echo "Using a timestamp to avoid browser cache..."
+          timestamp=$(date +%s)
+          sed -i "s,moteurldvelh.js,moteurldvelh.js?$timestamp," ./www/games/a_sample_game/index.htm
+          sed -i "s,moteurldvelh.js,moteurldvelh.js?$timestamp," ./www/games/cyberpunk/index.htm
+          echo ID_DU_JOB_DE_BUILD=$ID_DU_JOB_DE_BUILD >> mesVariables.env
+      # Enable Pages and extract various metadata about a site
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload only the content of this folder, will be on https://marl1.github.io/cyoajsengine/
+          path: './www'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
