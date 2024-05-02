@@ -1,12 +1,12 @@
 name: my-pretty-javafx-pipeline
-run-name: Testing the sample game with Playwright then deploy to GitHub pages
+run-name: Building PAN and uploading artifact
 # Will be launched in case of...
 on:
   # ...a push.
   push:
     branches: ["githubPipelineTests"]
     # ...a manual from the Actions tab
-    workflow_dispatch:
+  workflow_dispatch:
 jobs:
   building-my-pretty-PAN-artifact:
     timeout-minutes: 60
@@ -23,3 +23,12 @@ jobs:
       run: |
           mvn clean install -Djavafx.platform=win -P windows-build,dl-windows-jdk
           ls target
+    - name: Generate artifact name
+      id: generate-name
+      run: |
+        echo "::set-output name=artifact::${{ github.event.repository.name }}.${{ github.ref_name }}.${{ github.run_id }}.zip"  
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.generate-name.outputs.artifact }}
+        path: target/*.jar
