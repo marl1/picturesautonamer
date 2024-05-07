@@ -1,5 +1,6 @@
 package fr.pan.server;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -54,7 +55,7 @@ public class ServerLauncher {
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
 	        while ((line = reader.readLine()) != null) {
 	            LOGGER.info("[llamacpp] {}", line);
-	            if(line.startsWith("llama server listening at ")) {
+	            if(line.contains("HTTP server listening")) {
 	            	    	List<Path> fileList = listFiles(serverLaunchInfos);
 	            	    	LOGGER.info("There is {} image(s) to process.", fileList.size());
 	            	    	processFiles(serverLaunchInfos, process, fileList);
@@ -77,8 +78,8 @@ public class ServerLauncher {
 			 if(imgBase64.isPresent()) {
 				 String newName = ServerQuerier.launchQuery(imgBase64.get(), serverLaunchInfos.getPrompt());
 					renamingInfosList.add(new RenamingInfos(p, newName));
-
 		 	 }
+
 		 }
 		 System.out.println(renamingInfosList.get(0).getOldPath());
 		 System.out.println(renamingInfosList.get(0).getOldPath().getParent());
@@ -105,15 +106,20 @@ public class ServerLauncher {
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
 			LOGGER.info("Generating thumbnail for {}...", path);
 			BufferedImage originalImage = ImageIO.read(path.toFile());
-		    BufferedImage outputImage = Scalr.resize(originalImage, 300);
-		    ImageIO.write(outputImage, "jpeg", os);
+		    BufferedImage resizedImage = Scalr.resize(originalImage, 300);
+
+		    LOGGER.info("Converting...");
+		    final BufferedImage convertedImage = new BufferedImage(resizedImage.getWidth(), resizedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+		    convertedImage.createGraphics().drawImage(resizedImage, 0, 0, Color.WHITE, null); // I don't explain it but this line is necessary for png files
+		    ImageIO.write(resizedImage, "jpeg", os);
+
 			LOGGER.info("Generated. Getting base64 encoding...", path);
 			toReturn = Base64.getEncoder().encodeToString(os.toByteArray());
 		} catch (Exception e) {
 			LOGGER.error("FAILED to get base64 of {}", path);
 			return Optional.empty();
 		}
-		LOGGER.info("OK.", path);
+		LOGGER.info("OK.");
 		return Optional.of(toReturn);
 	}
 	
