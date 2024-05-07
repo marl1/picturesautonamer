@@ -106,12 +106,12 @@ public class ServerLauncher {
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
 			LOGGER.info("Generating thumbnail for {}...", path);
 			BufferedImage originalImage = ImageIO.read(path.toFile());
-		    BufferedImage resizedImage = Scalr.resize(originalImage, 300);
+		    BufferedImage resizedImage = Scalr.resize(originalImage, 200);
 
 		    LOGGER.info("Converting...");
 		    final BufferedImage convertedImage = new BufferedImage(resizedImage.getWidth(), resizedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
 		    convertedImage.createGraphics().drawImage(resizedImage, 0, 0, Color.WHITE, null); // I don't explain it but this line is necessary for png files
-		    ImageIO.write(resizedImage, "jpeg", os);
+		    ImageIO.write(convertedImage, "jpeg", os);
 
 			LOGGER.info("Generated. Getting base64 encoding...", path);
 			toReturn = Base64.getEncoder().encodeToString(os.toByteArray());
