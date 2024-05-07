@@ -19,7 +19,6 @@
 stages:          # List of stages for jobs, and their order of execution
   - .pre
   - build
-  - release
 
 pre_config:
   image: maven:3.8.4-openjdk-17
