@@ -6,6 +6,7 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.pan.server.ServerLauncher;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -41,11 +42,14 @@ public class Main extends Application {
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		    @Override
 		    public void handle(WindowEvent t) {
+		    	LOGGER.info("PicturesAutoNamer is closing...");
+		    	ServerLauncher.destroyServerProcess();
 		        Platform.exit();
 		        System.exit(0);
 		    }
 		});
     }
+
 }
 
 // a handy trick to launch JavaFX without using maven nor modules https://stackoverflow.com/questions/56551876/, that makes it easier to launch in debug

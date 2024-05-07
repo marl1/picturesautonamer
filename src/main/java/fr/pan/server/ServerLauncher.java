@@ -125,7 +125,7 @@ public class ServerLauncher {
 	
 	
 
-	private static void destroyServerProcess()  {
+	public static void destroyServerProcess()  {
 		LOGGER.info("Stopping the llamacpp process...");
 		LOGGER.info("Going to stop the process descendants (subprocesses) " + process.descendants().collect(Collectors.toList()));
 		process.descendants().forEach((ProcessHandle d) -> {
