@@ -1,4 +1,4 @@
-package fr.pan.server;
+package fr.pan.util;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -23,7 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import fr.pan.model.RenamingInfos;
 import fr.pan.model.ServerLaunchInfos;
-import fr.pan.util.Renamer;
+import fr.pan.server.ServerLauncher;
+import fr.pan.server.ServerQuerier;
 
 public class FilesProcesser {
 	
@@ -48,9 +49,6 @@ public class FilesProcesser {
 		 	 }
 
 		 }
-		 System.out.println(renamingInfosList.get(0).getOldPath());
-		 System.out.println(renamingInfosList.get(0).getOldPath().getParent());
-		 System.out.println(renamingInfosList.get(0).getNewFileName());
 		 service.submit(() -> Renamer.rename(renamingInfosList));
 		 service.submit(() -> ServerLauncher.destroyServerProcess());
 			
@@ -73,7 +71,7 @@ public class FilesProcesser {
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
 			LOGGER.info("Generating thumbnail for {}...", path);
 			BufferedImage originalImage = ImageIO.read(path.toFile());
-		    BufferedImage resizedImage = Scalr.resize(originalImage, 15);
+		    BufferedImage resizedImage = Scalr.resize(originalImage, 5);
 
 		    LOGGER.info("Converting...");
 		    final BufferedImage convertedImage = new BufferedImage(resizedImage.getWidth(), resizedImage.getHeight(), BufferedImage.TYPE_INT_RGB);

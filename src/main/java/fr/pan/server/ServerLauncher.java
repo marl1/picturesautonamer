@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.pan.model.RenamingInfos;
 import fr.pan.model.ServerLaunchInfos;
-import fr.pan.util.StreamReader;
+import fr.pan.util.FilesProcesser;
 import fr.pan.util.Renamer;
 
 public class ServerLauncher {
@@ -57,17 +57,27 @@ public class ServerLauncher {
 	    ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", currentRelativePath.resolve("llamacpp").resolve("launchLlavaServer.bat").toAbsolutePath().toString());
 
 		try {
-			processBuilder.inheritIO();
+			processBuilder.redirectErrorStream(true);
 			process = processBuilder.start();
-			TimeUnit.SECONDS.sleep(5);
-			FilesProcesser.startFileProcessing();
-		} catch (IOException | InterruptedException e) {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+			String line;
+			while ((line = reader.readLine()) != null) {
+			    System.out.println(line);
+		        if(line.contains("HTTP server listening")) {
+		        	new Thread(() -> {
+		        		FilesProcesser.startFileProcessing();
+		        	}).start();
+			     }
+			}
+			reader.close();
+		} catch (IOException e) {
 			LOGGER.error("Cannot start launchLlavaServer.bat.");
 		}
 	}
 
 	public static void destroyServerProcess()  {
-		if (process == null) {
+		if (process == null) { // process wasn't even launched, we quit
 			return;
 		}
 		LOGGER.info("Stopping the llamacpp process...");
@@ -84,6 +94,13 @@ public class ServerLauncher {
 		} catch (IOException e) {
 			LOGGER.error("Cannot close the llamacpp streams.");
 		}
+		try {
+			process.exitValue(); // if we got an exit value, it means llamacpp server has closed properly
+			LOGGER.info("Llamacpp server process stopped.");
+		} catch (IllegalThreadStateException e) {
+			LOGGER.error("Llamacpp doesn't seems to have stopped properly. Please check if the program \"server\" is running in your task manager.");
+		}
+		
 	}
 	
 	
