@@ -43,7 +43,6 @@ public class ServerQuerier {
 					.build();
 		
 
-		//quick test
 	    HttpClient client = HttpClient.newHttpClient();
 	    HttpRequest request;
 		try {

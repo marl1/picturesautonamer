@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ServerLaunchInfos {
+public class UserGuiInfos {
 	private final String folderToAnalyze;
 
 	private final String prompt;

@@ -22,21 +22,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.pan.model.RenamingInfos;
-import fr.pan.model.ServerLaunchInfos;
+import fr.pan.model.UserGuiInfos;
 import fr.pan.server.ServerLauncher;
 import fr.pan.server.ServerQuerier;
 
 public class FilesProcesser {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(FilesProcesser.class);	
-	
-	public static void startFileProcessing() {
-    	List<Path> fileList = listFiles(ServerLauncher.serverLaunchInfos);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FilesProcesser.class);
+
+	public void startFileProcessing(UserGuiInfos userGuiInfos) {
+    	List<Path> fileList = listFiles(userGuiInfos);
     	LOGGER.info("There is {} image(s) to process.", fileList.size());
-    	processFiles(ServerLauncher.serverLaunchInfos, fileList);
+    	processFiles(userGuiInfos, fileList);
 	}
 	
-	private static void processFiles(ServerLaunchInfos serverLaunchInfos, List<Path> fileList) {
+	private void processFiles(UserGuiInfos userGuiInfos, List<Path> fileList) {
 		ExecutorService service = Executors.newSingleThreadExecutor();
 		List<RenamingInfos> renamingInfosList = new ArrayList<>();
 		 for(Path p: fileList) {
@@ -44,7 +44,7 @@ public class FilesProcesser {
 			 
 			 Optional<String> imgBase64 = getImgInBase64(p);
 			 if(imgBase64.isPresent()) {
-				 String newName = ServerQuerier.launchQuery(imgBase64.get(), serverLaunchInfos.getPrompt());
+				 String newName = ServerQuerier.launchQuery(imgBase64.get(), userGuiInfos.getPrompt());
 					renamingInfosList.add(new RenamingInfos(p, newName));
 		 	 }
 
@@ -54,7 +54,7 @@ public class FilesProcesser {
 			
 	}
 	
-	private static List<Path> listFiles(ServerLaunchInfos serverLaunchInfos) {
+	private List<Path> listFiles(UserGuiInfos serverLaunchInfos) {
 		List<Path> listToReturn = new ArrayList<>();
 	    try (Stream<Path> stream = Files.list(Paths.get(serverLaunchInfos.getFolderToAnalyze()))) {
 	    	listToReturn.addAll(stream
@@ -66,12 +66,12 @@ public class FilesProcesser {
 	    return listToReturn;
 	}
 	
-	private static Optional<String> getImgInBase64(Path path) {
+	private Optional<String> getImgInBase64(Path path) {
 		String toReturn;
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
 			LOGGER.info("Generating thumbnail for {}...", path);
 			BufferedImage originalImage = ImageIO.read(path.toFile());
-		    BufferedImage resizedImage = Scalr.resize(originalImage, 5);
+		    BufferedImage resizedImage = Scalr.resize(originalImage, 120);
 
 		    LOGGER.info("Converting...");
 		    final BufferedImage convertedImage = new BufferedImage(resizedImage.getWidth(), resizedImage.getHeight(), BufferedImage.TYPE_INT_RGB);

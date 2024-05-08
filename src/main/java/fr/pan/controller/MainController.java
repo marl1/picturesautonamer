@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.pan.logging.OutputRedirector;
-import fr.pan.model.ServerLaunchInfos;
+import fr.pan.model.UserGuiInfos;
 import fr.pan.server.ServerLauncher;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -53,7 +53,7 @@ public class MainController {
 		Task<Boolean> task = new Task<Boolean>() {
 		    @Override
 		    protected Boolean call() throws Exception {
-				ServerLauncher.launch(new ServerLaunchInfos(inputFolder.getText(), prompt.getText()));
+				ServerLauncher.launch(new UserGuiInfos(inputFolder.getText(), prompt.getText()));
 				return true;
 		    }
 
