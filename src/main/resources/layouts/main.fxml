@@ -98,7 +98,7 @@
             </Separator>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#startConversionClicked" text="Analyse and convert">
+                  <Button fx:id="analyseConvertButton" mnemonicParsing="false" onAction="#startConversionClicked" text="Analyse and convert">
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </padding>

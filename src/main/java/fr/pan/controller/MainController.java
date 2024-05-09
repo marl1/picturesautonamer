@@ -9,10 +9,13 @@ import org.slf4j.LoggerFactory;
 import fr.pan.logging.OutputRedirector;
 import fr.pan.model.UserGuiInfos;
 import fr.pan.server.ServerLauncher;
+import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -32,10 +35,16 @@ public class MainController {
 	@FXML
 	private TextArea consoleOutput;
 	
+	@FXML
+	private Button analyseConvertButton;
+	
     @FXML
     public void initialize() {
     	System.setOut(new OutputRedirector(consoleOutput, System.out));
     	LOGGER.info("Init GUI...");
+    	analyseConvertButton.disableProperty().bind(
+    		    Bindings.isEmpty(inputFolder.textProperty())
+    		);
     }
 	
 	@FXML
@@ -43,8 +52,9 @@ public class MainController {
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 		File selectedDirectory = directoryChooser.showDialog((Stage)root.getScene().getWindow());
 
-		if(selectedDirectory != null)
+		if(selectedDirectory != null) {
 			inputFolder.textProperty().set(selectedDirectory.getAbsolutePath());
+		}
 	}
 	
 	@FXML
