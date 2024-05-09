@@ -76,7 +76,7 @@
             </HBox>
             <HBox nodeOrientation="LEFT_TO_RIGHT">
                <children>
-                  <CheckBox mnemonicParsing="false" text="Include subdirectories" />
+                  <CheckBox fx:id="includeSubdirectories" mnemonicParsing="false" text="Include subdirectories" />
                </children>
                <padding>
                   <Insets top="10.0" />

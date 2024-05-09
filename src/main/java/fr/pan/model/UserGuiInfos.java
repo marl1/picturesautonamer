@@ -9,5 +9,7 @@ public class UserGuiInfos {
 	private final String folderToAnalyze;
 
 	private final String prompt;
+	
+	private final boolean includingSubDirectories;
 
 }

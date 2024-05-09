@@ -23,6 +23,32 @@ public class FilesRenamerTest {
 	FilesRenamer filesRenamer = new FilesRenamer();
 
 	@Test
+	public void shouldRenameSpacesInCamelCase() {
+		// GIVEN
+		List<RenamingInfos> renamingInfosList = new ArrayList<>();
+		renamingInfosList.add(new RenamingInfos(Path.of("oldImageName"), "a red dog", ""));
+		
+		// WHEN
+		this.filesRenamer.cleanFileNames(renamingInfosList);
+		
+		// THEN
+		assertEquals("ARedDog", renamingInfosList.get(0).getNewFileName());
+	}
+
+	@Test
+	public void shouldRenameSnakeCaseInCamelCase() {
+		// GIVEN
+		List<RenamingInfos> renamingInfosList = new ArrayList<>();
+		renamingInfosList.add(new RenamingInfos(Path.of("oldImageName"), "a_red_dog", ""));
+		
+		// WHEN
+		this.filesRenamer.cleanFileNames(renamingInfosList);
+		
+		// THEN
+		assertEquals("ARedDog", renamingInfosList.get(0).getNewFileName());
+	}
+
+	@Test
 	public void shouldIncrementIfNameAlreadyInTheNewNamesList() {
 		// GIVEN
 		List<RenamingInfos> renamingInfosList = new ArrayList<>();
@@ -95,6 +121,20 @@ public class FilesRenamerTest {
 		
 		// THEN
 		assertEquals("ARedDog_45.png", retour);
+
+	}
+
+	@Test
+	public void shouldIncrementIfNameCollideWithAFileAlreadyIncrementedInTheFolderWithoutExtension(@TempDir Path tempDir) throws IOException {
+		// GIVEN
+		Path newFile = Files.createFile(tempDir.resolve("ARedDog_44"));
+		System.out.println(Files.exists(newFile));
+		
+		// WHEN
+		String retour = this.filesRenamer.getNewNameForCollidingWithExistingFile(new RenamingInfos(tempDir.resolve("oldImageName"), "ARedDog", ""), newFile);
+		
+		// THEN
+		assertEquals("ARedDog_45", retour);
 
 	}
 

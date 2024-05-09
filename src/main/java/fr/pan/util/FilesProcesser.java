@@ -63,14 +63,18 @@ public class FilesProcesser {
 		return toReturn;
 	}
 	
-	private List<Path> listFiles(UserGuiInfos serverLaunchInfos) {
+	private List<Path> listFiles(UserGuiInfos userGuiInfos) {
 		List<Path> listToReturn = new ArrayList<>();
-	    try (Stream<Path> stream = Files.list(Paths.get(serverLaunchInfos.getFolderToAnalyze()))) {
+		int folderDepth = 1;
+		if (userGuiInfos.isIncludingSubDirectories()) {
+			folderDepth = Integer.MAX_VALUE; // won't work if there is more than 2,147,483,647 nested directories, oh no.
+		}
+	    try (Stream<Path> stream = Files.walk(Paths.get(userGuiInfos.getFolderToAnalyze()), folderDepth)) {
 	    	listToReturn.addAll(stream
 	        		 				.filter(file -> !Files.isDirectory(file))
 	        		 				.toList());
 	    } catch (IOException e) {
-			LOGGER.error("FAILED to read the folder \"{}\"", serverLaunchInfos.getFolderToAnalyze());
+			LOGGER.error("FAILED to read the folder \"{}\"", userGuiInfos.getFolderToAnalyze());
 		}
 	    return listToReturn;
 	}
@@ -80,7 +84,7 @@ public class FilesProcesser {
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
 			LOGGER.info("Generating thumbnail for {}...", path);
 			BufferedImage originalImage = ImageIO.read(path.toFile());
-		    BufferedImage resizedImage = Scalr.resize(originalImage, 120);
+		    BufferedImage resizedImage = Scalr.resize(originalImage, 10);
 
 		    LOGGER.info("Converting...");
 		    final BufferedImage convertedImage = new BufferedImage(resizedImage.getWidth(), resizedImage.getHeight(), BufferedImage.TYPE_INT_RGB);

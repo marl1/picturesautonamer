@@ -13,6 +13,7 @@ import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -38,6 +39,9 @@ public class MainController {
 	@FXML
 	private Button analyseConvertButton;
 	
+	@FXML
+	private CheckBox includeSubdirectories;
+	
     @FXML
     public void initialize() {
     	System.setOut(new OutputRedirector(consoleOutput, System.out));
@@ -46,7 +50,7 @@ public class MainController {
     		    Bindings.isEmpty(inputFolder.textProperty())
     		);
     }
-	
+
 	@FXML
 	private void chooseFolderClicked() throws IOException {
 		DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -56,14 +60,14 @@ public class MainController {
 			inputFolder.textProperty().set(selectedDirectory.getAbsolutePath());
 		}
 	}
-	
+
 	@FXML
 	private void startConversionClicked() throws IOException {
 		
 		Task<Boolean> task = new Task<Boolean>() {
 		    @Override
 		    protected Boolean call() throws Exception {
-				ServerLauncher.launch(new UserGuiInfos(inputFolder.getText(), prompt.getText()));
+				ServerLauncher.launch(new UserGuiInfos(inputFolder.getText(), prompt.getText(), includeSubdirectories.isSelected()));
 				return true;
 		    }
 
