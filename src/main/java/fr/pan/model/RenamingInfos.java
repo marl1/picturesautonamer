@@ -15,5 +15,7 @@ public class RenamingInfos {
 	private Path oldPath;
 
 	private String newFileName;
+	
+	private String extension;
 
 }

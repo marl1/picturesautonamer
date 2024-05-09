@@ -36,6 +36,7 @@ public class Main extends Application {
 		VBox root = (VBox)FXMLLoader.load(url);
 		Scene scene = new Scene(root,600,600);
 		scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
+		stage.setTitle("PicturesAutoNamer");
 		stage.setScene(scene);
 		stage.show();
 		

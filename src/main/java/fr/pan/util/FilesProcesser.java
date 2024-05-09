@@ -40,18 +40,27 @@ public class FilesProcesser {
 		ExecutorService service = Executors.newSingleThreadExecutor();
 		List<RenamingInfos> renamingInfosList = new ArrayList<>();
 		 for(Path p: fileList) {
-			 LOGGER.info("Processing {}...", p);
+			 LOGGER.info("Processing \"{}\"...", p);
 			 
 			 Optional<String> imgBase64 = getImgInBase64(p);
 			 if(imgBase64.isPresent()) {
 				 String newName = ServerQuerier.launchQuery(imgBase64.get(), userGuiInfos.getPrompt());
-					renamingInfosList.add(new RenamingInfos(p, newName));
+				renamingInfosList.add(new RenamingInfos(p, newName, getFileExtension(p)));
 		 	 }
 
 		 }
 		 service.submit(() -> new FilesRenamer().rename(renamingInfosList));
 		 service.submit(() -> ServerLauncher.destroyServerProcess());
 			
+	}
+
+	private String getFileExtension(Path p) {
+		String toReturn = "";
+		if (p.getFileName().toString().contains(".")) {
+			toReturn = p.getFileName().toString().substring(p.getFileName().toString().lastIndexOf("."));
+		}
+		LOGGER.info("The file extension is " + toReturn);
+		return toReturn;
 	}
 	
 	private List<Path> listFiles(UserGuiInfos serverLaunchInfos) {
@@ -61,7 +70,7 @@ public class FilesProcesser {
 	        		 				.filter(file -> !Files.isDirectory(file))
 	        		 				.toList());
 	    } catch (IOException e) {
-			LOGGER.error("FAILED to read the folder {}", serverLaunchInfos.getFolderToAnalyze());
+			LOGGER.error("FAILED to read the folder \"{}\"", serverLaunchInfos.getFolderToAnalyze());
 		}
 	    return listToReturn;
 	}
@@ -80,8 +89,11 @@ public class FilesProcesser {
 
 			LOGGER.info("Generated. Getting base64 encoding...", path);
 			toReturn = Base64.getEncoder().encodeToString(os.toByteArray());
+			if (toReturn == "") { // for whatever reason we couldn't get the base 64 and have an empty String, saw this live once on some previously unsupported filetypes
+				throw new Exception();
+			}
 		} catch (Exception e) {
-			LOGGER.error("FAILED to get base64 of {}", path);
+			LOGGER.error("FAILED to get base64 of \"{}\"", path);
 			return Optional.empty();
 		}
 		LOGGER.info("OK.");

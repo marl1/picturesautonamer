@@ -2,11 +2,14 @@ package fr.pan.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +27,10 @@ public class FilesRenamerTest {
 		// GIVEN
 		List<RenamingInfos> renamingInfosList = new ArrayList<>();
 		//an image representing a red dog already existed
-		renamingInfosList.add(new RenamingInfos(Path.of("oldImageName"), "ARedDog"));
+		renamingInfosList.add(new RenamingInfos(Path.of("oldImageName"), "ARedDog", ""));
 
 		//...an we have another image of the same red dog, thus, name collision
-		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog"));
+		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog", ""));
 
 		
 		// WHEN
@@ -43,17 +46,17 @@ public class FilesRenamerTest {
 		// GIVEN
 		List<RenamingInfos> renamingInfosList = new ArrayList<>();
 		//an image representing a red dog already existed
-		renamingInfosList.add(new RenamingInfos(Path.of("oldImageName"), "ARedDog"));
+		renamingInfosList.add(new RenamingInfos(Path.of("oldImageName"), "ARedDog", ""));
 
 		//...an we have another image of the same red dog
-		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog_1"));
+		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog_1", ""));
 		
 		//...an we have ANOTHER another image of the same red dog
-		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog_2"));
+		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog_2", ""));
 		
 
 		//...an we have ANOTHER ANOTHER another image of the same red dog, thus, name collision
-		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog"));
+		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog", ""));
 		
 		RenamingInfos fileUnderTest = renamingInfosList.get(3);
 
@@ -64,6 +67,35 @@ public class FilesRenamerTest {
 		// THEN
 		System.out.println(renamingInfosList);
 		assertEquals("ARedDog_3", fileUnderTest.getNewFileName());
+	}
+	
+
+	@Test
+	public void shouldIncrementIfNameCollideWithAFileInTheFolder(@TempDir Path tempDir) throws IOException {
+		// GIVEN
+		Path newFile = Files.createFile(tempDir.resolve("ARedDog.png"));
+		System.out.println(Files.exists(newFile));
+		
+		// WHEN
+		String retour = this.filesRenamer.getNewNameForCollidingWithExistingFile(new RenamingInfos(tempDir.resolve("oldImageName"), "ARedDog", ".png"), newFile);
+		
+		// THEN
+		assertEquals("ARedDog_2.png", retour);
+
+	}
+	
+	@Test
+	public void shouldIncrementIfNameCollideWithAFileAlreadyIncrementedInTheFolder(@TempDir Path tempDir) throws IOException {
+		// GIVEN
+		Path newFile = Files.createFile(tempDir.resolve("ARedDog_44.png"));
+		System.out.println(Files.exists(newFile));
+		
+		// WHEN
+		String retour = this.filesRenamer.getNewNameForCollidingWithExistingFile(new RenamingInfos(tempDir.resolve("oldImageName"), "ARedDog", ".png"), newFile);
+		
+		// THEN
+		assertEquals("ARedDog_45.png", retour);
+
 	}
 
 }

@@ -23,23 +23,46 @@ public class FilesRenamer {
 	public void rename(List<RenamingInfos> renamingInfosList) {
 		//TODO a method to check if an oldname=newname in renamingInfosList
 		
-		
-		for(RenamingInfos renamingInfos:clean(renamingInfosList)) {
+		renamingInfosList = cleanFileNames(renamingInfosList);
+		for(RenamingInfos renamingInfos:renamingInfosList) {
+			Path newPath = renamingInfos.getOldPath().getParent().resolve(renamingInfos.getNewFileName() + renamingInfos.getExtension());
+			
+			if(Files.exists(newPath)) { // we want to rename the file but a file with the same name already exist in the folder
+				newPath = renamingInfos.getOldPath().getParent().resolve(getNewNameForCollidingWithExistingFile(renamingInfos, newPath));
+			}
 			try {
-				Files.move(renamingInfos.getOldPath(), renamingInfos.getOldPath().getParent().resolve(renamingInfos.getNewFileName()));
+				Files.move(renamingInfos.getOldPath(), newPath);
 			} catch (Exception e) {
 				LOGGER.error("Couldn't rename {}", renamingInfos.getOldPath().toString());
 			}
 		}
 		
 	}
+
+	/**
+	 * In case the new name collide with a file already existing in the folder
+	 * @param renamingInfos
+	 * @param newPath
+	 * @return the new file name
+	 */
+	public String getNewNameForCollidingWithExistingFile(RenamingInfos renamingInfos, Path newPath) {
+		LOGGER.info("We want to create {} but it already exists in the folder.", newPath);
+		int lastKnownNumber = 1;
+		while(Files.exists(newPath)) {
+			if (Character.isDigit(newPath.toString()
+					.charAt(newPath.toString().length()-(1+renamingInfos.getExtension().length())))) {
+				// we use the digits at the end to increment
+				lastKnownNumber = Integer.parseInt(newPath.toString().substring(0, newPath.toString().length()-(renamingInfos.getExtension().length())).replaceFirst("^.*\\D",""));
+			}
+			renamingInfos.setNewFileName(renamingInfos.getNewFileName().replaceAll("[\\d_]*$", "")+"_"+(lastKnownNumber+1));
+			newPath = renamingInfos.getOldPath().getParent().resolve(renamingInfos.getNewFileName() + renamingInfos.getExtension());
+		}
+		LOGGER.info("It will become {}.", newPath.getFileName());
+		return newPath.getFileName().toString();
+	}
 	
-	public List<RenamingInfos> clean(List<RenamingInfos> renamingInfosList) {
-		
-		List<String> oldFileNameList = renamingInfosList.stream().map(renamingInfos -> renamingInfos.getOldPath().getFileName().toString()).toList();
-		List<String> newFileNameList = renamingInfosList.stream().map(renamingInfos -> renamingInfos.getNewFileName()).toList();
-		Map<String, Integer> namesOccurencesMap = new HashMap<>();
-		
+	public List<RenamingInfos> cleanFileNames(List<RenamingInfos> renamingInfosList) {
+
 		for(RenamingInfos renamingInfos:renamingInfosList) {
 			if (renamingInfosList == null) {
 				continue;
@@ -78,12 +101,7 @@ public class FilesRenamer {
 			
 			incrementOnIdenticalFileName(renamingInfosList, renamingInfos);
 
-			//We re-add the original extension, if there was one
-			String oldFileName = renamingInfos.getOldPath().getFileName().toString();
-			if (oldFileName.contains(".")) {
-				renamingInfos.setNewFileName(renamingInfos.getNewFileName() + oldFileName.substring(oldFileName.lastIndexOf(".")));
-			}
-			LOGGER.info("{} will be renamed {}.",renamingInfos.getOldPath(), renamingInfos.getNewFileName());
+			LOGGER.info("\"{}\" will be renamed {}.",renamingInfos.getOldPath(), renamingInfos.getNewFileName()+renamingInfos.getExtension());
 		}
 		return renamingInfosList;
 	}
@@ -104,7 +122,7 @@ public class FilesRenamer {
 			int lastKnownNumber = 0;
 			if (Character.isDigit(biggestFileName.charAt(biggestFileName.length()-1))) {
 				// we get the digits at the end
-				lastKnownNumber = Integer.parseInt(filesWithSameNameIgnoringTrailingNumbers.get(0).replaceFirst("^.*\\D",""));
+				lastKnownNumber = Integer.parseInt(biggestFileName.replaceFirst("^.*\\D",""));
 			}
 			renamingInfos.setNewFileName(renamingInfos.getNewFileName()+"_"+(lastKnownNumber+1)); // we add the number at the end of the file name
 		}
