@@ -49,7 +49,7 @@ public class FilesProcesser {
 		 	 }
 
 		 }
-		 service.submit(() -> Renamer.rename(renamingInfosList));
+		 service.submit(() -> new FilesRenamer().rename(renamingInfosList));
 		 service.submit(() -> ServerLauncher.destroyServerProcess());
 			
 	}
