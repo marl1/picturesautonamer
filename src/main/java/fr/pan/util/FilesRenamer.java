@@ -99,36 +99,10 @@ public class FilesRenamer {
 				renamingInfos.setNewFileName(renamingInfos.getNewFileName().substring(0, renamingInfos.getNewFileName().length()-1));
 			}
 			
-			incrementOnIdenticalFileName(renamingInfosList, renamingInfos);
 
 			LOGGER.info("\"{}\" will be renamed {}.",renamingInfos.getOldPath(), renamingInfos.getNewFileName()+renamingInfos.getExtension());
 		}
 		return renamingInfosList;
 	}
 
-	public void incrementOnIdenticalFileName(List<RenamingInfos> renamingInfosList, RenamingInfos renamingInfos) {
-		//How many of files that have the same name? (excluding numbers at the end)
-		List<String> filesWithSameNameIgnoringTrailingNumbers =
-				renamingInfosList.stream()
-				.filter(fileInfo -> fileInfo.getNewFileName().replaceAll("[\\d_]*$", "") // regex to check if ARedDog_1 match ARedDog or ARedDog_56
-									.equals(renamingInfos.getNewFileName().replaceAll("[\\d_]*$", "")))
-				.map(fileInfo -> fileInfo.getNewFileName())
-				.collect(Collectors.toList());
-		if(filesWithSameNameIgnoringTrailingNumbers.size()>1) {
-			// there is more than 1, meaning the current file and another one
-			Collections.sort(filesWithSameNameIgnoringTrailingNumbers);
-			Collections.reverse(filesWithSameNameIgnoringTrailingNumbers); // let sort them in reverse to put the biggest number on top
-			String biggestFileName = filesWithSameNameIgnoringTrailingNumbers.get(0);
-			int lastKnownNumber = 0;
-			if (Character.isDigit(biggestFileName.charAt(biggestFileName.length()-1))) {
-				// we get the digits at the end
-				lastKnownNumber = Integer.parseInt(biggestFileName.replaceFirst("^.*\\D",""));
-			}
-			renamingInfos.setNewFileName(renamingInfos.getNewFileName()+"_"+(lastKnownNumber+1)); // we add the number at the end of the file name
-		}
-	}
-
-	public static List<RenamingInfos> changeNameIfAlreadyExists(List<RenamingInfos> renamingInfosList) {
-		return renamingInfosList;
-	}
 }

@@ -46,55 +46,7 @@ public class FilesRenamerTest {
 		
 		// THEN
 		assertEquals("ARedDog", renamingInfosList.get(0).getNewFileName());
-	}
-
-	@Test
-	public void shouldIncrementIfNameAlreadyInTheNewNamesList() {
-		// GIVEN
-		List<RenamingInfos> renamingInfosList = new ArrayList<>();
-		//an image representing a red dog already existed
-		renamingInfosList.add(new RenamingInfos(Path.of("oldImageName"), "ARedDog", ""));
-
-		//...an we have another image of the same red dog, thus, name collision
-		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog", ""));
-
-		
-		// WHEN
-		this.filesRenamer.incrementOnIdenticalFileName(renamingInfosList, renamingInfosList.get(1));
-		
-		// THEN
-		assertEquals("ARedDog_1", renamingInfosList.get(1).getNewFileName());
-	}
-
-
-	@Test
-	public void shouldIncrementIfNameAlreadyHasBeenIncrementedInTheNewNamesList() {
-		// GIVEN
-		List<RenamingInfos> renamingInfosList = new ArrayList<>();
-		//an image representing a red dog already existed
-		renamingInfosList.add(new RenamingInfos(Path.of("oldImageName"), "ARedDog", ""));
-
-		//...an we have another image of the same red dog
-		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog_1", ""));
-		
-		//...an we have ANOTHER another image of the same red dog
-		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog_2", ""));
-		
-
-		//...an we have ANOTHER ANOTHER another image of the same red dog, thus, name collision
-		renamingInfosList.add(new RenamingInfos(Path.of("anotherOldImageName"), "ARedDog", ""));
-		
-		RenamingInfos fileUnderTest = renamingInfosList.get(3);
-
-		
-		// WHEN
-		this.filesRenamer.incrementOnIdenticalFileName(renamingInfosList, fileUnderTest);
-		
-		// THEN
-		System.out.println(renamingInfosList);
-		assertEquals("ARedDog_3", fileUnderTest.getNewFileName());
-	}
-	
+	}	
 
 	@Test
 	public void shouldIncrementIfNameCollideWithAFileInTheFolder(@TempDir Path tempDir) throws IOException {

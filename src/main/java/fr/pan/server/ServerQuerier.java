@@ -47,7 +47,7 @@ public class ServerQuerier {
 	    HttpRequest request;
 		try {
 			String bodyInString = objectMapper.writeValueAsString(body);
-			LOGGER.info(bodyInString);
+			LOGGER.debug(bodyInString);
 			request = HttpRequest.newBuilder()
 			      .uri(URI.create("http://127.0.0.1:8080/completion"))
 			      .POST(HttpRequest.BodyPublishers.ofString(bodyInString))
