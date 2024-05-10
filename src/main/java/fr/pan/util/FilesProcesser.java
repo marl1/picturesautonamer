@@ -25,6 +25,7 @@ import fr.pan.model.RenamingInfos;
 import fr.pan.model.UserGuiInfos;
 import fr.pan.server.ServerLauncher;
 import fr.pan.server.ServerQuerier;
+import javafx.application.Platform;
 
 public class FilesProcesser {
 	
@@ -40,17 +41,23 @@ public class FilesProcesser {
 		ExecutorService service = Executors.newSingleThreadExecutor();
 		List<RenamingInfos> renamingInfosList = new ArrayList<>();
 		 for(Path p: fileList) {
+			 final int fileNumberFinal = fileList.indexOf(p);
 			 LOGGER.info("Processing \"{}\"...", p);
-			 
+			 Platform.runLater(() -> {
+			 userGuiInfos.getMainController().updateProgress((double)fileNumberFinal/fileList.size(), p.toString(), (fileNumberFinal) + "/" + fileList.size());
+			 });
 			 Optional<String> imgBase64 = getImgInBase64(p);
 			 if(imgBase64.isPresent()) {
 				 String newName = ServerQuerier.launchQuery(imgBase64.get(), userGuiInfos.getPrompt());
 				renamingInfosList.add(new RenamingInfos(p, newName, getFileExtension(p)));
 		 	 }
-
 		 }
+
+		 Platform.runLater(() -> { userGuiInfos.getMainController().indicateRenaming(); });
+
 		 service.submit(() -> new FilesRenamer().rename(renamingInfosList));
 		 service.submit(() -> ServerLauncher.destroyServerProcess());
+		 Platform.runLater(() -> { userGuiInfos.getMainController().indicateFinished(); });
 			
 	}
 

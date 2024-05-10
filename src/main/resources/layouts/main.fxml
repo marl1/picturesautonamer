@@ -39,6 +39,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -46,6 +47,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
 <VBox fx:id="root" prefHeight="612.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.pan.controller.MainController">
   <children>
@@ -124,6 +126,19 @@
                   <Insets bottom="10.0" />
                </padding>
             </TitledPane>
+            <Separator prefWidth="200.0" visible="false">
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+            </Separator>
+            <Label fx:id="currentFile" wrapText="true" />
+            <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" prefHeight="18.0" prefWidth="611.0" progress="0.0" VBox.vgrow="ALWAYS" />
+            <Text fx:id="numberProgress" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Separator prefWidth="200.0" visible="false">
+               <padding>
+                  <Insets bottom="10.0" top="10.0" />
+               </padding>
+            </Separator>
          </children>
          <VBox.margin>
             <Insets left="20.0" right="20.0" />

@@ -23,6 +23,7 @@ public class Main extends Application {
 	public static void main(String[] args) throws IOException, InterruptedException {		
 		try {
 		LOGGER.info("PicturesAutoNamer is starting...");
+		Platform.setImplicitExit(false);
 		launch();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());

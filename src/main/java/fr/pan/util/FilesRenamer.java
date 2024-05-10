@@ -16,13 +16,12 @@ import org.slf4j.LoggerFactory;
 import fr.pan.constant.ImageFileTypes;
 import fr.pan.model.RenamingInfos;
 import fr.pan.server.ServerQuerier;
+import javafx.application.Platform;
 
 public class FilesRenamer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerQuerier.class);	
 
 	public void rename(List<RenamingInfos> renamingInfosList) {
-		//TODO a method to check if an oldname=newname in renamingInfosList
-		
 		renamingInfosList = cleanFileNames(renamingInfosList);
 		for(RenamingInfos renamingInfos:renamingInfosList) {
 			Path newPath = renamingInfos.getOldPath().getParent().resolve(renamingInfos.getNewFileName() + renamingInfos.getExtension());

@@ -11,8 +11,11 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.pan.controller.MainController;
 import fr.pan.model.UserGuiInfos;
 import fr.pan.util.FilesProcesser;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 public class ServerLauncher {
 	
@@ -53,9 +56,15 @@ public class ServerLauncher {
 			while ((line = reader.readLine()) != null) {
 			    LOGGER.info("[server] " + line);
 		        if(line.contains("HTTP server listening")) {
-		        	new Thread(() -> {
-		        		new FilesProcesser().startFileProcessing(userGuiInfos);
-		        	}).start();
+		    		Task<Boolean> task = new Task<Boolean>() {
+		    		    @Override
+		    		    protected Boolean call() throws Exception {
+			        		new FilesProcesser().startFileProcessing(userGuiInfos);
+		    				return true;
+		    		    }
+
+		    		};
+		    		new Thread(task).start();
 			     }
 			}
 			reader.close();
@@ -65,7 +74,7 @@ public class ServerLauncher {
 	}
 
 	public static void destroyServerProcess()  {
-		if (process == null) { // process wasn't even launched, we quit
+		if (process == null || !process.isAlive()) { // process wasn't even launched, we quit
 			return;
 		}
 		LOGGER.info("Stopping the llamacpp process...");
