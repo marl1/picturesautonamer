@@ -2,15 +2,15 @@
 
 A Java frontend using llamacpp and local LLaVA LLM to **rename pictures according to their content**.
 
-![](demo.mp4)
-<video src="https://github.com/marl1/picturesautonamer/assets/23550999/8638ef79-61fb-4b08-8ab8-44dd6036f4f5" width="320" height="240" controls></video>
+![demo](example.gif)
 
 ## FEATURES
-* Show a window to choose a folder
+* An user interface to choose a folder/subdirectories and display the progress
 * Resize each picture (using [imgscalr](https://github.com/rkalla/imgscalr) lib)
 * Connect to a local [llamacpp](https://github.com/ggerganov/llama.cpp) server running [LLaVA](https://llava.hliu.cc/)
 * Send each picture to the server
 * Rename the file after having cleaned up LLaVA's answer and accounted for duplicate
+* Handle the case where the name chosen by LLaVA collide with an already existing name
 
 Support jpg, png, bmp, webp thanks to the [TwelveMonkeys](https://github.com/haraldk/TwelveMonkeys) library.
 
@@ -23,9 +23,9 @@ Support jpg, png, bmp, webp thanks to the [TwelveMonkeys](https://github.com/har
 * Launch PicturesAutoNamer.bat.
 * Select a folder, press "Analyse and covert".
 
+![](install.mp4)
+
 ## TO DO
-* Handle the case where the name chosen by LLaVA collide with an already existing name
 * More images formats (which ones?)
-* Sub-directories
 * Linux version
 * "About" popup
