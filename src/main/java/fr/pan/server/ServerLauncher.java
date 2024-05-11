@@ -43,9 +43,20 @@ public class ServerLauncher {
 		Path currentRelativePath = Paths.get("");
 		LOGGER.info("Current absolute path is: " + currentRelativePath.toAbsolutePath().toString());
 		
-		String llamaCppServerPath = currentRelativePath.resolve("llamacpp").resolve("launchLlavaServer.bat").toAbsolutePath().toString();
-		LOGGER.info("Launching llamaCpp server from: " + llamaCppServerPath);
-	    ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", llamaCppServerPath);
+		String llamaCppServerPath;
+		ProcessBuilder processBuilder = new ProcessBuilder();
+		if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+			llamaCppServerPath = currentRelativePath.resolve("llamacpp").resolve("launchLlavaServer.bat")
+					.toAbsolutePath().toString();
+		    processBuilder.command("cmd.exe", "/C", llamaCppServerPath);
+			LOGGER.info("Launching llamaCpp server from: " + llamaCppServerPath);
+		} else {
+			llamaCppServerPath = currentRelativePath.resolve("llamacpp").resolve("linux/launchLlavaServer.sh")
+					.toAbsolutePath().toString();
+			processBuilder.command(llamaCppServerPath);
+			LOGGER.info("Launching llamaCpp server from: " + llamaCppServerPath);
+		}
+		
 
 		try {
 			processBuilder.redirectErrorStream(true);
@@ -69,7 +80,7 @@ public class ServerLauncher {
 			}
 			reader.close();
 		} catch (IOException e) {
-			LOGGER.error("Cannot start launchLlavaServer.bat.");
+			LOGGER.error("Cannot start {}", llamaCppServerPath, e);
 		}
 	}
 
