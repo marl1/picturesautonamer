@@ -3,9 +3,11 @@ package fr.pan.util;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.text.CaseUtils;
 import org.slf4j.Logger;
@@ -14,32 +16,53 @@ import org.slf4j.LoggerFactory;
 import fr.pan.constant.ImageFileTypes;
 import fr.pan.model.RenamingInfos;
 import fr.pan.server.ServerQuerier;
+import javafx.application.Platform;
 
-public class Renamer {
+public class FilesRenamer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerQuerier.class);	
 
-	public static void rename(List<RenamingInfos> renamingInfosList) {
-		//TODO a method to check if an oldname=newname in renamingInfosList
-		
-		
-		for(RenamingInfos renamingInfos:clean(renamingInfosList)) {
+	public void rename(List<RenamingInfos> renamingInfosList) {
+		renamingInfosList = cleanFileNames(renamingInfosList);
+		for(RenamingInfos renamingInfos:renamingInfosList) {
+			Path newPath = renamingInfos.getOldPath().getParent().resolve(renamingInfos.getNewFileName() + renamingInfos.getExtension());
+			
+			if(Files.exists(newPath)) { // we want to rename the file but a file with the same name already exist in the folder
+				newPath = renamingInfos.getOldPath().getParent().resolve(getNewNameForCollidingWithExistingFile(renamingInfos, newPath));
+			}
 			try {
-				Files.move(renamingInfos.getOldPath(), renamingInfos.getOldPath().getParent().resolve(renamingInfos.getNewFileName()));
+				Files.move(renamingInfos.getOldPath(), newPath);
 			} catch (Exception e) {
 				LOGGER.error("Couldn't rename {}", renamingInfos.getOldPath().toString());
 			}
 		}
 		
 	}
+
+	/**
+	 * In case the new name collide with a file already existing in the folder
+	 * @param renamingInfos
+	 * @param newPath
+	 * @return the new file name
+	 */
+	public String getNewNameForCollidingWithExistingFile(RenamingInfos renamingInfos, Path newPath) {
+		LOGGER.info("We want to create {} but it already exists in the folder.", newPath);
+		int lastKnownNumber = 1;
+		while(Files.exists(newPath)) {
+			if (Character.isDigit(newPath.toString()
+					.charAt(newPath.toString().length()-(1+renamingInfos.getExtension().length())))) {
+				// we use the digits at the end to increment
+				lastKnownNumber = Integer.parseInt(newPath.toString().substring(0, newPath.toString().length()-(renamingInfos.getExtension().length())).replaceFirst("^.*\\D",""));
+			}
+			renamingInfos.setNewFileName(renamingInfos.getNewFileName().replaceAll("[\\d_]*$", "")+"_"+(lastKnownNumber+1));
+			newPath = renamingInfos.getOldPath().getParent().resolve(renamingInfos.getNewFileName() + renamingInfos.getExtension());
+		}
+		LOGGER.info("It will become {}.", newPath.getFileName());
+		return newPath.getFileName().toString();
+	}
 	
-	public static List<RenamingInfos> clean(List<RenamingInfos> renamingInfosList) {
-		
-		List<String> oldFileNameList = renamingInfosList.stream().map(renamingInfos -> renamingInfos.getOldPath().getFileName().toString()).toList();
-		List<String> newFileNameList = renamingInfosList.stream().map(renamingInfos -> renamingInfos.getNewFileName()).toList();
-		Map<String, Integer> namesOccurencesMap = new HashMap<>();
-		
+	public List<RenamingInfos> cleanFileNames(List<RenamingInfos> renamingInfosList) {
+
 		for(RenamingInfos renamingInfos:renamingInfosList) {
-			String originalNewName = renamingInfos.getNewFileName();
 			if (renamingInfosList == null) {
 				continue;
 			}
@@ -70,32 +93,15 @@ public class Renamer {
 				
 			}
 
-			//The LLM forgot a . at the end?
+			//The LLM added a . at the end? We remove it.
 			if (renamingInfos.getNewFileName().endsWith(".")) {
 				renamingInfos.setNewFileName(renamingInfos.getNewFileName().substring(0, renamingInfos.getNewFileName().length()-1));
 			}
 			
-			//Another file(s) with the same new name? We add the number index at the end.
-			if (newFileNameList.stream().filter(n -> n.equals(originalNewName)).count() > 1) {
-				namesOccurencesMap.putIfAbsent(renamingInfos.getNewFileName(), 1);
-				Integer num = namesOccurencesMap.replace(renamingInfos.getNewFileName(), namesOccurencesMap.get(renamingInfos.getNewFileName())+1);
-				if(num>1)
-					renamingInfos.setNewFileName(renamingInfos.getNewFileName()+num);
-			}
-			
-			//We readd the original extension
-			String oldFileName = renamingInfos.getOldPath().getFileName().toString();
-			renamingInfos.setNewFileName(renamingInfos.getNewFileName() + oldFileName.substring(oldFileName.lastIndexOf("."))); 
-			LOGGER.info("{} will be renamed {}.",renamingInfos.getOldPath(), renamingInfos.getNewFileName());
+
+			LOGGER.info("\"{}\" will be renamed {}.",renamingInfos.getOldPath(), renamingInfos.getNewFileName()+renamingInfos.getExtension());
 		}
 		return renamingInfosList;
 	}
-	
-	public static List<RenamingInfos> changeNameIfAlreadyExists(List<RenamingInfos> renamingInfosList) {
 
-
-		
-		
-		return renamingInfosList;
-	}
 }

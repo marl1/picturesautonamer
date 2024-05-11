@@ -1,0 +1,39 @@
+name: my-pretty-javafx-pipeline
+run-name: Building PAN and uploading artifact
+# Will be launched in case of...
+on:
+  # ...a push.
+  push:
+    branches: ["githubPipelineTests"]
+  # ...a manual action from the Actions tab
+  workflow_dispatch:
+jobs:
+  building-my-pretty-PAN-artifact:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: master
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'adopt'
+        java-version: '17'
+    - name: building my pretty PAN artifact
+      run: |
+          mvn clean install -Djavafx.platform=win -P windows-build,dl-windows-jdk
+          ls target
+    - name: Generate artifact name
+      id: generate-name
+      run: |
+        VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.1.1:evaluate -Dexpression=project.version -q -DforceStdout)
+        echo $VERSION
+        ARTIFACT_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:3.1.1:evaluate -Dexpression=project.artifactId -q -DforceStdout)
+        echo $ARTIFACT_ID
+        export FULL_NAME=$(echo "$ARTIFACT_ID"-"$VERSION")
+        echo FULL_NAME=$FULL_NAME >> $GITHUB_OUTPUT 
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.generate-name.outputs.FULL_NAME }}
+        path: target/*.jar

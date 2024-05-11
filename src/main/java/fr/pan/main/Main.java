@@ -6,6 +6,7 @@ import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.pan.server.ServerLauncher;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -22,6 +23,7 @@ public class Main extends Application {
 	public static void main(String[] args) throws IOException, InterruptedException {		
 		try {
 		LOGGER.info("PicturesAutoNamer is starting...");
+		Platform.setImplicitExit(false);
 		launch();
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -35,17 +37,21 @@ public class Main extends Application {
 		VBox root = (VBox)FXMLLoader.load(url);
 		Scene scene = new Scene(root,600,600);
 		scene.getStylesheets().add(getClass().getResource("/css/application.css").toExternalForm());
+		stage.setTitle("PicturesAutoNamer");
 		stage.setScene(scene);
 		stage.show();
 		
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		    @Override
 		    public void handle(WindowEvent t) {
+		    	LOGGER.info("PicturesAutoNamer is closing...");
+		    	ServerLauncher.destroyServerProcess();
 		        Platform.exit();
 		        System.exit(0);
 		    }
 		});
     }
+
 }
 
 // a handy trick to launch JavaFX without using maven nor modules https://stackoverflow.com/questions/56551876/, that makes it easier to launch in debug
