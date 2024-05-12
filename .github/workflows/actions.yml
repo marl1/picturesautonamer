@@ -18,7 +18,7 @@ jobs:
     - uses: actions/setup-java@v4
       with:
         distribution: 'adopt'
-        java-version: '17'
+        java-version: '21'
     - name: building my pretty PAN artifact
       run: |
           mvn clean install -Djavafx.platform=win -P windows-build,dl-windows-jdk

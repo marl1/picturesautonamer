@@ -21,7 +21,7 @@ stages:          # List of stages for jobs, and their order of execution
   - build
 
 pre_config:
-  image: maven:3.8.4-openjdk-17
+  image: maven:3.9.6-eclipse-temurin-21
   stage: .pre
   script:
       - VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.1.1:evaluate -Dexpression=project.version -q -DforceStdout)
@@ -38,7 +38,7 @@ pre_config:
       dotenv: mesVariables.env
 
 build_artifacts:
-  image: openjdk:21-jdk
+  image: maven:3.9.6-eclipse-temurin-21
   stage: build
   script:
       - 'mvn clean install -Djavafx.platform=win -P windows-build,dl-windows-jdk'
@@ -50,7 +50,7 @@ build_artifacts:
     expire_in: 2 hours
 
 build_artifacts:
-  image: openjdk:21-jdk
+  image: maven:3.9.6-eclipse-temurin-21
   stage: build
   script:
       - 'mvn clean install -Djavafx.platform=win -P linux-build,dl-linux-jdk'
@@ -62,7 +62,7 @@ build_artifacts:
     expire_in: 2 hours
 
 build_artifacts_for_tags:
-  image: openjdk:21-jdk
+  image: maven:3.9.6-eclipse-temurin-21
   stage: build
   script:
       - 'mvn clean install -Djavafx.platform=win -P windows-build,dl-windows-jdk'
@@ -76,7 +76,7 @@ build_artifacts_for_tags:
     - if: $CI_COMMIT_TAG
     
 build_artifacts_for_tags:
-  image: openjdk:21-jdk
+  image: maven:3.9.6-eclipse-temurin-21
   stage: build
   script:
       - 'mvn clean install -Djavafx.platform=linux -P linux-build,dl-linux-jdk'
