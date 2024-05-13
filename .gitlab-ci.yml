@@ -43,7 +43,7 @@ build_win_artifacts:
   script:
       - 'mvn clean install -Djavafx.platform=win -P windows-build,dl-windows-jdk'
       - 'ls target'
-      - 'mv target/{FULL_NAME}-win ./{FULL_NAME}-win'
+      - 'mv target/${FULL_NAME}-win ./${FULL_NAME}-win'
   artifacts:
     name: $FULL_NAME-win
     paths:
@@ -56,7 +56,7 @@ build_linux_artifacts:
   script:
       - 'mvn clean install -Djavafx.platform=linux -P linux-build,dl-linux-jdk'
       - 'ls target'
-      - 'mv target/{FULL_NAME}-linux ./{FULL_NAME}-linux'
+      - 'mv target/${FULL_NAME}-linux ./${FULL_NAME}-linux'
   artifacts:
     name: $FULL_NAME-linux
     paths:
