@@ -519,7 +519,7 @@
 							</execution>
 							<execution>
 								<id>copy-scripts</id>
-								<phase>install</phase>
+								<phase>package</phase>
 								<goals>
 									<goal>copy-resources</goal>
 								</goals>
@@ -558,7 +558,7 @@
 						<executions>
 							<execution>
 							<id>linux-build</id>
-							<phase>install</phase>
+							<phase>package</phase>
 							<goals>
 								<goal>jlink</goal>
 							</goals>
@@ -601,7 +601,7 @@
 							</execution>
 							<execution>
 								<id>copy-scripts</id>
-								<phase>install</phase>
+								<phase>package</phase>
 								<goals>
 									<goal>copy-resources</goal>
 								</goals>
