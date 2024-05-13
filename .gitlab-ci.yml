@@ -37,7 +37,7 @@ pre_config:
     reports:
       dotenv: mesVariables.env
 
-build_artifacts:
+build__win_artifacts:
   image: maven:3.9.6-eclipse-temurin-21
   stage: build
   script:
@@ -49,7 +49,7 @@ build_artifacts:
       - target/${FULL_NAME}-win/*
     expire_in: 2 hours
 
-build_artifacts:
+build_linux_artifacts:
   image: maven:3.9.6-eclipse-temurin-21
   stage: build
   script:
@@ -61,7 +61,7 @@ build_artifacts:
       - target/${FULL_NAME}-linux/*
     expire_in: 2 hours
 
-build_artifacts_for_tags:
+build_win_artifacts_for_tags:
   image: maven:3.9.6-eclipse-temurin-21
   stage: build
   script:
@@ -75,7 +75,7 @@ build_artifacts_for_tags:
   rules:
     - if: $CI_COMMIT_TAG
     
-build_artifacts_for_tags:
+build__linux_artifacts_for_tags:
   image: maven:3.9.6-eclipse-temurin-21
   stage: build
   script:
