@@ -69,10 +69,11 @@ build_win_artifacts_for_tags:
   script:
       - 'mvn clean install -Djavafx.platform=win -P windows-build,dl-windows-jdk'
       - 'ls target'
+      - 'mv target/${FULL_NAME}-win ./${FULL_NAME}-win'
   artifacts:
     name: $FULL_NAME-win
     paths:
-      - target/${FULL_NAME}-win/*
+      - ${FULL_NAME}-win/*
     expire_in: never
   rules:
     - if: $CI_COMMIT_TAG
@@ -82,11 +83,12 @@ build_linux_artifacts_for_tags:
   stage: build
   script:
       - 'mvn clean install -Djavafx.platform=linux -P linux-build,dl-linux-jdk'
+      - 'mv target/${FULL_NAME}-linux ./${FULL_NAME}-linux'
       - 'ls target'
   artifacts:
     name: $FULL_NAME-linux
     paths:
-      - target/${FULL_NAME}-linux/*
+      - ${FULL_NAME}-linux/*
     expire_in: never
   rules:
     - if: $CI_COMMIT_TAG
