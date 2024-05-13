@@ -53,6 +53,7 @@ build_linux_artifacts:
   image: maven:3.9.6-eclipse-temurin-21
   stage: build
   script:
+      - 'apt-get update && apt-get install -y --no-install-recommends openjfx && rm -rf /var/lib/apt/lists/*'
       - 'mvn clean install -Djavafx.platform=win -P linux-build,dl-linux-jdk'
       - 'ls target'
   artifacts:
