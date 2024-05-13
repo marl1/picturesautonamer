@@ -6,10 +6,11 @@
 	<name>PicturesAutoNamer</name>
 	<properties>
 	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.target>17</maven.compiler.target>
-		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+		<maven.compiler.source>21</maven.compiler.source>
 		<lombok.version>1.18.30</lombok.version>
 		<javaFX.version>21.0.1</javaFX.version>
+		<java.version>21</java.version>
 	</properties>
 	<dependencyManagement>
 	<dependencies>
@@ -374,8 +375,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.11.0</version>
 				<configuration>
-					<source>17</source>
-					<target>17</target>
+					<source>21</source>
+					<target>21</target>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
@@ -398,29 +399,9 @@
 						<artifactId>mvn-jlink-wrapper</artifactId>
 						<version>1.2.1</version>
 						<executions>
-							<!-- <execution>
-							<phase>prepare-package</phase>
-							<id>cache-jdk-17-linux</id>
-							<goals>
-								<goal>cache-jdk</goal>
-							</goals>
-							<configuration>
-								<jdkPathProperty>jlink.jdk.path</jdkPathProperty>
-								<jdkCachePath>${project.build.directory}${file.separator}jdkCache</jdkCachePath>
-								<provider>ADOPTIUM</provider>
-								<providerConfig>
-									<version>17U</version>
-									<arch>x64</arch>
-									<type>jdk</type>
-									<impl>hotspot</impl>
-									<os>linux</os>
-									<build>2024-01-14-16-16</build>
-								</providerConfig>
-							</configuration>
-						</execution> -->
 							<execution>
 								<phase>prepare-package</phase>
-								<id>cache-jdk-17-windows</id>
+								<id>cache-jdk-21-windows</id>
 								<goals>
 									<goal>cache-jdk</goal>
 								</goals>
@@ -428,12 +409,47 @@
 									<jdkCachePath>${project.build.directory}${file.separator}jdkCache</jdkCachePath>
 									<provider>ADOPTIUM</provider>
 									<providerConfig>
-										<version>17U</version>
+										<version>21U</version>
 										<arch>x64</arch>
 										<type>jdk</type>
 										<impl>hotspot</impl>
 										<os>windows</os>
-										<build>2024-01-14-16-16</build>
+										<build>2024-01-21-02-59</build>
+									</providerConfig>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>dl-linux-jdk</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.igormaznitsa</groupId>
+						<!-- Plugin to download other plateform JDK, thus enabling jlink to generate image for all platforms-->
+						<artifactId>mvn-jlink-wrapper</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<phase>prepare-package</phase>
+								<id>cache-jdk-21-linux</id>
+								<goals>
+									<goal>cache-jdk</goal>
+								</goals>
+								<configuration>
+									<jdkPathProperty>jlink.jdk.path</jdkPathProperty>
+									<jdkCachePath>${project.build.directory}${file.separator}jdkCache</jdkCachePath>
+									<provider>ADOPTIUM</provider>
+									<providerConfig>
+										<version>21U</version>
+										<arch>x64</arch>
+										<type>jdk</type>
+										<impl>hotspot</impl>
+										<os>linux</os>
+										<build>2024-01-21-02-59</build>
 									</providerConfig>
 								</configuration>
 							</execution>
@@ -459,27 +475,6 @@
 						</configuration>
 						<!-- The following executions are used to compile/package the app for distribution -->
 						<executions>
-							<!-- <execution>
-						<id>linux-build</id>
-						<phase>install</phase>
-						<goals>
-							<goal>jlink</goal>
-						</goals>
-						<configuration>
-							<stripDebug>true</stripDebug>
-							<noHeaderFiles>true</noHeaderFiles>
-							<noManPages>true</noManPages>
-							<launcher>PicturesAutoNamer</launcher>
-							<jlinkImageName>PicturesAutoNamer</jlinkImageName>
-							<mainClass>fr.pan.main.Main</mainClass> -->
-							<!-- Here we point to the downloaded linux JDK from mvn-jlink-wrapper and also the modules created by moditect -->
-							<!-- <jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_17u_2024-01-14-16-16_linux_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
-							<jlinkImageName>${project.name}-${project.version}-linux</jlinkImageName>
-							<jlinkZipName>${project.name}-${project.version}-linux</jlinkZipName>
-							<bindServices>true</bindServices>
-							<runtimePathOption>MODULEPATH</runtimePathOption>
-						</configuration>
-					</execution>-->
 							<execution>
 								<id>windows-build</id>
 								<goals>
@@ -494,7 +489,7 @@
 									<jlinkImageName>PicturesAutoNamer</jlinkImageName>
 									<mainClass>fr.pan.main.Main</mainClass>
 									<!-- Here we point to the downloaded windows JDK from mvn-jlink-wrapper and also the modules created by moditect -->
-									<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_17u_2024-01-14-16-16_windows_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
+									<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_21u_2024-01-21-02-59_windows_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
 									<jlinkImageName>${project.name}-${project.version}-win</jlinkImageName>
 									<bindServices>true</bindServices>
 									<runtimePathOption>MODULEPATH</runtimePathOption>
@@ -533,6 +528,88 @@
 									<resources>
 										<resource>
 											<directory>scripts/win</directory>
+											<filtering>false</filtering>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>linux-build</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.openjfx</groupId>
+						<!-- This plugin is mandatory to run/package JavaFx Applications. It also runs jlink. -->
+						<artifactId>javafx-maven-plugin</artifactId>
+						<version>0.0.8</version>
+						<configuration>
+							<!-- This configuration is used when we launch the app manually using "mvn javafx:run"-->
+							<launcher>PicturesAutoNamer</launcher>
+							<jlinkImageName>PicturesAutoNamer</jlinkImageName>
+							<mainClass>fr.pan.main.Main</mainClass>
+							<executable>${java.home}/bin/java</executable>
+						</configuration>
+						<!-- The following executions are used to compile/package the app for distribution -->
+						<executions>
+							<execution>
+							<id>linux-build</id>
+							<phase>install</phase>
+							<goals>
+								<goal>jlink</goal>
+							</goals>
+							<configuration>
+								<stripDebug>true</stripDebug>
+								<noHeaderFiles>true</noHeaderFiles>
+								<noManPages>true</noManPages>
+								<launcher>PicturesAutoNamer</launcher>
+								<jlinkImageName>PicturesAutoNamer</jlinkImageName>
+								<mainClass>fr.pan.main.Main</mainClass> -->
+								<!-- Here we point to the downloaded linux JDK from mvn-jlink-wrapper and also the modules created by moditect -->
+								<jmodsPath>${project.build.directory}${file.separator}jdkCache${file.separator}ADOPTIUM_21u_2024-01-21-02-59_linux_x64_hotspot${file.separator}jmods${path.separator}${project.build.directory}${file.separator}modules</jmodsPath>
+								<jlinkImageName>${project.name}-${project.version}-linux</jlinkImageName>
+								<jlinkZipName>${project.name}-${project.version}-linux</jlinkZipName>
+								<bindServices>true</bindServices>
+								<runtimePathOption>MODULEPATH</runtimePathOption>
+							</configuration>
+						</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.3.1</version>
+						<executions>
+							<execution>
+								<id>copy-llamacpp</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${basedir}/target/${project.name}-${project.version}-linux/llamacpp</outputDirectory>
+									<resources>
+										<resource>
+											<directory>llamacpp</directory>
+											<filtering>false</filtering>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-scripts</id>
+								<phase>install</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${basedir}/target/${project.name}-${project.version}-linux</outputDirectory>
+									<resources>
+										<resource>
+											<directory>scripts/linux</directory>
 											<filtering>false</filtering>
 										</resource>
 									</resources>
