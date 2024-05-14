@@ -1,13 +1,8 @@
 package fr.pan.util;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.text.CaseUtils;
 import org.slf4j.Logger;
@@ -16,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import fr.pan.constant.ImageFileTypes;
 import fr.pan.model.RenamingInfos;
 import fr.pan.server.ServerQuerier;
-import javafx.application.Platform;
 
 public class FilesRenamer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ServerQuerier.class);	

@@ -91,7 +91,7 @@ public class FilesProcesser {
 		try (ByteArrayOutputStream os = new ByteArrayOutputStream()){
 			LOGGER.info("Generating thumbnail for {}...", path);
 			BufferedImage originalImage = ImageIO.read(path.toFile());
-		    BufferedImage resizedImage = Scalr.resize(originalImage, 10);
+		    BufferedImage resizedImage = Scalr.resize(originalImage, 200);
 
 		    LOGGER.info("Converting...");
 		    final BufferedImage convertedImage = new BufferedImage(resizedImage.getWidth(), resizedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
