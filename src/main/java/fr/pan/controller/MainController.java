@@ -12,16 +12,19 @@ import fr.pan.server.ServerLauncher;
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MainController {
@@ -53,6 +56,8 @@ public class MainController {
 
 	@FXML
 	private Text numberProgress;
+	
+	private Stage aboutStage;
 	
     @FXML
     public void initialize() {
@@ -86,7 +91,24 @@ public class MainController {
 		};
 		new Thread(task).start();
 	}
+	
+	@FXML
+	private void aboutClicked() throws IOException {
+		if (aboutStage == null) {
+			aboutStage = new Stage();
+			aboutStage.initModality(Modality.APPLICATION_MODAL);
+			aboutStage.initOwner((Stage) root.getScene().getWindow());
+			aboutStage.setTitle("About PictureAutoNamer");
+	        Pane dialogRoot = (Pane)FXMLLoader.load(getClass().getResource("/layouts/about.fxml"));
+	        Scene dialogScene = new Scene(dialogRoot, 500, 350);
+	        aboutStage.setResizable(false);
+	        aboutStage.setScene(dialogScene);
+		}
+        aboutStage.show();
 
+	}
+
+	
 	public void updateProgress(double progress, String currentPath, String numberProgress) {
 		this.progressBar.setProgress(progress);
 		this.currentFile.setText("Finding a name for \"" + currentPath + "\"...");

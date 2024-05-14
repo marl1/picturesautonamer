@@ -6,9 +6,8 @@ A Java frontend using llamacpp and local LLaVA LLM to **rename pictures accordin
 
 ## FEATURES
 * An user interface to choose a folder/subdirectories and display the progress
-* Resize each picture (using [imgscalr](https://github.com/rkalla/imgscalr) lib)
-* Connect to a local [llamacpp](https://github.com/ggerganov/llama.cpp) server running [LLaVA](https://llava.hliu.cc/)
-* Send each picture to the server
+* Auto-resize each picture (using [imgscalr](https://github.com/rkalla/imgscalr) lib)
+* Send a request to a local [llamacpp](https://github.com/ggerganov/llama.cpp) server running [LLaVA](https://llava.hliu.cc/)
 * Rename the file after having cleaned up LLaVA's answer and accounted for duplicate
 * Handle the case where the name chosen by LLaVA collide with an already existing name
 
@@ -27,5 +26,3 @@ Support jpg, png, bmp, webp thanks to the [TwelveMonkeys](https://github.com/har
 
 ## TO DO
 * More images formats (which ones?)
-* Linux version
-* "About" popup

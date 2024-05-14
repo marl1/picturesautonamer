@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="346.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.pan.controller.AboutController">
+   <children>
+      <Text layoutX="14.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PictureAutoNamer">
+         <font>
+            <Font size="42.0" />
+         </font>
+      </Text>
+      <Text layoutX="14.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Version 1.0.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Label layoutX="14.0" layoutY="160.0" text="Big thanks to ggerganov, slaren, cebtenzzre and others Llamacpp contributors&#10;for bringing LLM to consumer-grade PC." />
+      <Label layoutX="14.0" layoutY="239.0" text="Big thanks to LLaVA creators." />
+      <Label layoutX="14.0" layoutY="106.0" text="Author: Marc Leveque (MarcLv on GitLab / Marl1 on Github)&#10;MIT Licensed" />
+      <Hyperlink graphicTextGap="0.0" layoutX="8.0" layoutY="194.0" onAction="#openLlamaCppContribPage" text="https://github.com/ggerganov/llama.cpp/graphs/contributors" />
+      <Button layoutX="263.0" layoutY="294.0" mnemonicParsing="false" onAction="#closeAbout" prefHeight="25.0" prefWidth="74.0" text="OK" />
+      <Hyperlink graphicTextGap="0.0" layoutX="8.0" layoutY="256.0" onAction="#openLlavaPage" text="https://llava-vl.github.io/" />
+   </children>
+</Pane>
