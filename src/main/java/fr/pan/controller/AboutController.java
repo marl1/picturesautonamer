@@ -58,7 +58,13 @@ public class AboutController {
 	
 	private void openWebsite(String url) {
 		try {
-		    Desktop.getDesktop().browse(new URL(url).toURI());
+			if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+				Desktop.getDesktop().browse(new URL(url).toURI());
+			}else if (Runtime.getRuntime().exec(new String[] { "which", "xdg-open" }).getInputStream().read() != -1) {
+	                Runtime.getRuntime().exec(new String[] { "xdg-open", url });
+		    } else {
+		    	LOGGER.info("No way to open {}", url);
+		    }
 		} catch (IOException | URISyntaxException e) {
 			LOGGER.error("Error trying to open {}", url, e);
 		}
